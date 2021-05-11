@@ -25,8 +25,11 @@ form {
 
 .signin_section_main_contenedor {
     position: relative;
-    width: 100%;
+    width: 100vw;
     background-image: url("https://i.pinimg.com/originals/97/57/93/975793fff4eb682dcc396c2885a13f2f.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-origin: border-box;
     min-height: 100vh;
     overflow: hidden;
 }
@@ -75,7 +78,7 @@ form {
     width: 80%;
 
     &_title {
-        font-size: 2.2rem;
+        font-size: 2rem;
         color: #444;
         margin-bottom: 10px;
     }
@@ -106,7 +109,7 @@ form {
 
     &_input-field {
         max-width: 380px;
-      
+        width: 100%;
         background-color: #f0f0f0;
         margin: 10px 0;
         height: 55px;
@@ -128,7 +131,7 @@ form {
             border: none;
             line-height: 1;
             font-weight: 600;
-            font-size: 1.1rem;
+            font-size: 16px;
             color: #333;
         }
 
@@ -253,6 +256,9 @@ form {
         padding: 0 1.5rem;
         width: 95% !important;
         margin: 0;
+    }
+
+    .section_signin_form {
     }
 
     .signin_section_2_panels-container {
