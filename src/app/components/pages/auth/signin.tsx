@@ -1,4 +1,4 @@
-import {Link} from 'react-router-dom';
+import log from '../../../img/log.svg'
 
 const SigninScreen = () => {
     return <section className='signin_section_main_contenedor'>
@@ -19,15 +19,23 @@ const SigninScreen = () => {
                             <input type="password" name="password" placeholder="Password" />
                         </div>
                         <input type="submit" value="Iniciar Sesion" className="section_signin_form btn solid" />
-                       
-                       
+
+
                     </form>
                 </div>
             </div>
         </div>
 
-        <div className="signin_section_2">
+        <div className="signin_section_2_panels-container">
+            <div className="section_panelAuth section_left-panelAuth">
+                <div className="section_panelAuth_contenido">
+                    <h3>Hey cómo estas?</h3>
+                    <p>Recuerda en caso de perdida de contraseñas el departamento de informática sera de mucha ayuda!</p>
+                </div>
+                <img src={log} className="signin_section_2_panels-container_image" alt="" />
+            </div>
 
+          
 
         </div>
 
