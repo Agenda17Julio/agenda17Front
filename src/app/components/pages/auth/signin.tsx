@@ -9,7 +9,7 @@ const SigninScreen = () => {
             
         </div>
 
-    </section>
+    </section>     
 }
 
 export default SigninScreen;
