@@ -4,7 +4,8 @@ const types:i_types =  {
     login: '[AUTH] login',
     logout: '[AUTH] logout',
     checking: '[Auth] checking auth',
-    checkbtn: '[Auth] check btn submit'
+    startLoading: '[UI] start loading',
+    stopLoading:  '[UI] stop loading'
 }
 
 

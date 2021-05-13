@@ -6,6 +6,7 @@ import RootRoutes from './root';
 import { useDispatch, useSelector } from 'react-redux';
 import { startChecking } from '../actions/auth';
 import { i_redux } from '../interfaces/redux';
+import Loading from '../components/ui/loading';
 
 const Routes = () => {
 
@@ -18,9 +19,7 @@ const Routes = () => {
 
     const isAuth = !!uid;
 
-    if( checking ) return <div>
-        por favor espere!
-    </div> 
+    if( checking ) return <Loading />
 
     return <Router>
         <Switch>

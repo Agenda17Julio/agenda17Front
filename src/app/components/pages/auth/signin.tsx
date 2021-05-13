@@ -1,9 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { checkBtn, startLogin } from '../../../actions/auth';
+import { startLogin } from '../../../actions/auth';
+import { startLoading } from '../../../actions/ui';
 import useForm from '../../../hooks/useForm';
 import { i_signin } from '../../../interfaces/components/auth';
 import { i_redux } from '../../../interfaces/redux';
-
+import Loading from '../../ui/loading';
 
 
 const SigninScreen = () => {
@@ -14,7 +15,7 @@ const SigninScreen = () => {
     }
 
     const dispatch = useDispatch();
-    const { checkbtn } = useSelector((info:i_redux) => info.auth);
+    const { loading } = useSelector((info:i_redux) => info.ui);
 
     const [ value, handleInputOnChange ] = useForm(init);
     const { username, password } = value as i_signin;
@@ -22,11 +23,14 @@ const SigninScreen = () => {
 
     const handleSubmit = (e:Event) => {
         e.preventDefault();
+        dispatch( startLoading() );
         dispatch( startLogin(value) );
-        dispatch( checkBtn() );
     }
 
+    if( loading ) return <Loading/>
+
     return <>
+        
         <section className='signin_main'>
 
             <form onSubmit={ handleSubmit as any }>
@@ -60,11 +64,7 @@ const SigninScreen = () => {
                     </label>
                 </div>
 
-                <button 
-                    type="submit"
-                    disabled={ checkbtn }
-                    >Signin
-                </button>
+                <button type="submit">Signin</button>
 
             </form>
 

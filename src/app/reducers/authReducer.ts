@@ -5,13 +5,12 @@ import { i_auth_state as i_state, i_auth_action as i_action } from '../interface
 const init:i_state = {
     uid: '',
     username: '',
-    checking: true,
-    checkbtn: false
+    checking: true
 }
 
 const AuthReducer = (state = init, action:i_action):i_state => {
 
-    const { login, logout,checking, checkbtn } = types;
+    const { login, logout,checking } = types;
     const { type, payload } = action;
 
     switch( type ) {
@@ -27,14 +26,11 @@ const AuthReducer = (state = init, action:i_action):i_state => {
                 checking: false
             }
             break;
-        case checkbtn:
-            state = {
-                ...state,
-                checkbtn: true
-            }
-            break;
         case logout:
-            state = init;
+            state = {
+                ...init,
+                checking: false
+            };
             break;
     }
 

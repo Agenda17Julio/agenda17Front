@@ -5,6 +5,7 @@ import { i_signin,i_resp_serv } from '../interfaces/components/auth';
 import { fetchWithoutToken,fetchWithToken } from '../helpers/fetch';
 import { decode } from 'jsonwebtoken';
 import Swal from 'sweetalert2';
+import { stopLoading } from './ui';
 
 export const startLogin = (data:i_signin) => async ( callback:Function ) => {
     const resp = await fetchWithoutToken({url:'/auth/login',method:'POST', data});
@@ -14,14 +15,19 @@ export const startLogin = (data:i_signin) => async ( callback:Function ) => {
         localStorage.setItem('x-token',token);
         const { payload } = decode(token) as i_token;
         callback(login(payload));
+        callback( stopLoading() );
+        
     } else {
         callback( startLogout() );
+        callback( stopLoading() );
         return Swal.fire({
             title: 'Oh no!',
             text: msg,
             icon: 'error'
         });
     }
+
+    
 }
 
 export const startLogout = () => ( callback:Function ) => {
@@ -66,13 +72,6 @@ export const logout = ():i_action => {
 
 export const finishChecking = ():i_action => {
     const { checking:type } = types;
-    return {
-        type
-    }
-}
-
-export const checkBtn = ():i_action => {
-    const { checkbtn:type } = types;
     return {
         type
     }
