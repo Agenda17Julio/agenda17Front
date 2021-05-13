@@ -1,4 +1,4 @@
-import { Switch,Route, Redirect } from 'react-router-dom';
+import { Switch,Route } from 'react-router-dom';
 import ConvocatoriaRoutes from './convocatorias';
 import ActasRoutes from './actas';
 import Navbar from '../components/ui/nav';
