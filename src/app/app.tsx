@@ -1,8 +1,8 @@
 import './styles/index.scss';
-import SigninScreen from './components/pages/auth/signin';
+import Routes from './router/index';
 
 const App = () => <> 
-    <SigninScreen/>
+    <Routes/>
 </>
 
 

@@ -35,7 +35,7 @@ const SigninScreen = () => {
                 <img src={log} className="signin_section_2_panels-container_image" alt="" />
             </div>
 
-          
+
 
         </div>
 
