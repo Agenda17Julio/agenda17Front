@@ -37,7 +37,7 @@ const SigninScreen = () => {
         <div className="signin_section_container">
             <div className="signin_section_container_forms-container">
                 <div className="signin_section_container_forms-container_signin-signup">
-                    <form className="section_signin_form" >
+                    <form className="section_signin_form" onSubmit={handleSubmit as any} >
                         <h2 className="section_signin_form_title">Logearse</h2>
                         <div className="section_signin_form_input-field">
                             <span className="material-icons">
