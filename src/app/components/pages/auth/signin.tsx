@@ -6,6 +6,7 @@ import useForm from '../../../hooks/useForm';
 import { i_signin } from '../../../interfaces/components/auth';
 import { i_redux } from '../../../interfaces/redux';
 import Loading from '../../ui/loading';
+import '../../../styles/components/auth/_signin.scss'
 
 const SigninScreen = () => {
 
@@ -36,34 +37,24 @@ const SigninScreen = () => {
         <div className="signin_section_container">
             <div className="signin_section_container_forms-container">
                 <div className="signin_section_container_forms-container_signin-signup">
-                    <form className="section_signin_form">
+                    <form className="section_signin_form" >
                         <h2 className="section_signin_form_title">Logearse</h2>
                         <div className="section_signin_form_input-field">
                             <span className="material-icons">
                                 person</span>
-                            <input type="text" name="email" placeholder="Username" />
-                            <label htmlFor="usernameid">
-                                <span>Username</span>
-                                <input
-                                    type="text"
-                                    id="usernameid"
-                                    name='username'
-                                    value={username}
-                                    onChange={handleInputOnChange}
-                                    minLength={0}
-                                    maxLength={30}
-                                />
-                            </label>
-
+                            <input
+                                type="text"
+                                id="usernameid"
+                                name='username'
+                                value={username}
+                                onChange={handleInputOnChange}
+                                minLength={0}
+                                maxLength={30}
+                            />
                         </div>
                         <div className="section_signin_form_input-field">
                             <span className="material-icons">
                                 vpn_key</span>
-                            <input type="password" name="password" placeholder="Password" />
-                        </div>
-                        <input type="submit" value="Iniciar Sesion" className="section_signin_form btn solid" />
-                        <label htmlFor="passwordid">
-                            <span>Password</span>
                             <input
                                 type="password"
                                 id="passwordid"
@@ -72,8 +63,8 @@ const SigninScreen = () => {
                                 onChange={handleInputOnChange}
                                 minLength={0}
                             />
-                        </label>
-
+                        </div>
+                        <input type="submit" value="Iniciar Sesion" className="section_signin_form btn solid" />
                     </form>
                 </div>
             </div>
@@ -87,12 +78,7 @@ const SigninScreen = () => {
                 </div>
                 <img src={log} className="signin_section_2_panels-container_image" alt="" />
             </div>
-
-
-
         </div>
-
-
 
     </section>
 }
