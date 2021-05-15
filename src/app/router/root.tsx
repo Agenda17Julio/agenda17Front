@@ -1,12 +1,12 @@
 import { Switch,Route } from 'react-router-dom';
 import ConvocatoriaRoutes from './convocatorias';
 import ActasRoutes from './actas';
-import Navbar from '../components/ui/nav';
+// import Navbar from '../components/ui/nav';
 import NotFound from '../components/pages/err/notFound';
 
 
 const MainRouter = () => <div>
-    <Navbar/> 
+    {/* <Navbar/>  */}
     <Switch>               
         <Route
             path='/actas'

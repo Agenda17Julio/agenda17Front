@@ -1,0 +1,27 @@
+body {
+    &::-webkit-scrollbar {
+        width: 6px;     /* Tamaño del scroll en vertical */
+        height: 6px;    /* Tamaño del scroll en horizontal */
+    }
+    &::-webkit-scrollbar-thumb {
+        background: gray;
+        border-radius: 4px;
+
+        &:hover {
+            background: $darkness;
+            box-shadow: 0 0 2px 1px rgba(114, 112, 112, 0.2);
+        }
+
+        &:active {
+            background-color: $dark-bluesky;
+        }
+    }
+
+    .container::-webkit-scrollbar-track {
+        background: #e1e1e1;
+        border-radius: 4px;
+
+        &:hover,&:active { background: #d4d4d4; }
+    }
+    
+}

@@ -1,0 +1,26 @@
+.convocatoria_container {
+    position: relative;
+}
+.container_father_fab {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column-reverse;
+    margin-right: .7em;
+    margin-bottom: .7em;
+    height: fit-content;
+    z-index: 20;
+
+    & > .fab {
+        margin: .5em 0;
+        transform: scale(1);
+        transition: all .4s ease-in-out;
+        
+    }
+
+    & > .toggle-hidden {
+        transform: scale(0);
+        position: absolute;
+    }
+}

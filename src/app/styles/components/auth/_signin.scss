@@ -1,20 +1,18 @@
 .signin_main{
-    background-color: #000;
-    color:#fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
 }
 
 
-.signin_section {
+.form {
     
-    &_1 {
+    width: 400px;
+    height: fit-content;
 
-    }
-
-    &_2 {
-        
-    }
-
-    &_title {
-
+    & > .btn {
+        width: 100%;
+        margin: 2em 0;
     }
 }

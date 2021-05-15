@@ -10,15 +10,15 @@ import Loading from '../../ui/loading';
 const SigninScreen = () => {
 
     const init = {
-        username: 'jbpaig@gmail.com',
-        password: 'gt37285'
+        username: '',
+        password: ''
     }
 
     const dispatch = useDispatch();
     const { loading } = useSelector((info:i_redux) => info.ui);
 
     const [ value, handleInputOnChange ] = useForm(init);
-    const { username, password } = value as i_signin;
+    const { username, password } = value as i_signin<string>;
 
 
     const handleSubmit = (e:Event) => {
@@ -33,11 +33,11 @@ const SigninScreen = () => {
         
         <section className='signin_main'>
 
-            <form onSubmit={ handleSubmit as any }>
+            <form onSubmit={ handleSubmit as any }  className='form'>
 
-                <div>
-                    <label htmlFor="usernameid">
-                        <span>Username</span>
+                <div className="input-field col s6">
+                        <i className="material-icons prefix">account_circle</i>
+                        <label htmlFor="usernameid">Username</label>
                         <input 
                             type="text"
                             id="usernameid"
@@ -45,26 +45,27 @@ const SigninScreen = () => {
                             value={ username }
                             onChange={ handleInputOnChange }
                             minLength={0}
-                            maxLength={30}
+                            maxLength={30} 
+                            className="validate"
                         />
-                    </label>
-                </div>
-
-                <div>
-                    <label htmlFor="passwordid">
-                        <span>Password</span>
+                    </div>
+                    <div className="input-field col s6">
+                        <i className="material-icons prefix">lock</i>
+                        <label htmlFor="passwordid">Password</label>
                         <input 
-                            type="password"
-                            id="passwordid"
-                            name='password'
-                            value={ password }
-                            onChange={ handleInputOnChange }
-                            minLength={0}
+                             type="password"
+                             id="passwordid"
+                             name='password'
+                             value={ password }
+                             onChange={ handleInputOnChange }
+                             minLength={0}
                         />
-                    </label>
                 </div>
 
-                <button type="submit">Signin</button>
+                <button 
+                    type="submit"
+                    className='btn waves-effect waves-light primary'
+                    >Signin</button>
 
             </form>
 

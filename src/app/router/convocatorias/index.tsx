@@ -1,5 +1,5 @@
 import { Switch, Route, Redirect } from 'react-router-dom';
-import CalendarScreen from '../../components/pages/root/convocatorias/calendarScreen';
+import ConvocatoriaScreen from '../../components/pages/root/convocatorias/convocatoriaScreen';
 
 const ConvocatoriaRoutes = () => {
     return <>
@@ -7,7 +7,7 @@ const ConvocatoriaRoutes = () => {
             <Route
                 path='/'
                 exact={ true }
-                component={ CalendarScreen }
+                component={ ConvocatoriaScreen }
             />
             <Redirect to='/notfound'/>
         </Switch>
