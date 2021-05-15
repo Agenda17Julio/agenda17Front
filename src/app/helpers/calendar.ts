@@ -2,7 +2,7 @@ import { FormatterInput,ButtonTextCompoundInput,PluginDef,DateRangeInput } from 
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from "@fullcalendar/interaction"; 
 import listView from '@fullcalendar/list';
-import moment from 'moment';
+import moment from './momentjs';
 
 export const titleFormat:FormatterInput ={
     year: 'numeric',

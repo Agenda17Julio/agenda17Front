@@ -1,9 +1,8 @@
-import Calendar from '../../../ui/calendar';
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import ListConvocatorias from './listConvocatorias';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 import { startLoadActiveAnnoucements } from '../../../../actions/convocatoria';
-import { i_redux } from '../../../../interfaces/redux';
-import { i_events_convocatoria } from '../../../../interfaces/helper/events';
+import Calendar from './calendarScreen';
 
 const ConvocatoriaScreen = () => {
 
@@ -13,37 +12,14 @@ const ConvocatoriaScreen = () => {
         dispatch(startLoadActiveAnnoucements());
     },[dispatch]);
 
-    let { conv:{actives},fab } = useSelector((info:i_redux) => info);
-
-    let eventsActives:i_events_convocatoria[] = actives 
-        ? actives?.map((active:any) => {
-            active.color='#f59c42';
-            active.date = active.fecha;
-            active.title = active.asunto;
-            active.editable = true;
-            active.allDay = false;
-            return active;
-        }) : [];
-  
-
-    return <div className='convocatoria_container'>
-        <Calendar listEvents={ eventsActives }/>
-
-        <div className="container_father_fab">
-            <a 
-                className={`btn-floating btn-large cyan pulse fab ${ !fab?.plus && 'toggle-hidden'}`}>
-                <i className="material-icons">add</i>
-            </a>
-            <a className={`btn-floating btn-large cyan pulse fab ${ !fab?.editDelete && 'toggle-hidden'}`}>
-                <i className="material-icons">edit</i>
-            </a>
-            <a className={`btn-floating btn-large red lighten-1 pulse fab ${ !fab?.editDelete && 'toggle-hidden'}`}>
-                <i className="material-icons">delete</i>
-            </a>
-
-
+    return <>
+        <div>
+            <ListConvocatorias/>
         </div>
-    </div>
+        <div>
+            <Calendar/>
+        </div>
+    </>
 }
 
 

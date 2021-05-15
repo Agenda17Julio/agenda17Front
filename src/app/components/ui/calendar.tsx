@@ -22,7 +22,6 @@ import { i_argsStr } from '../../interfaces/helper/calendar';
 import { i_redux } from '../../interfaces/redux';
 
 const Calendar = ( {listEvents}:{ listEvents:EventSourceInput }) => {
-
    
 
     const dispatch = useDispatch();
