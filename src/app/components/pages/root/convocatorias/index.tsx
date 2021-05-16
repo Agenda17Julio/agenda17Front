@@ -22,7 +22,7 @@ const ConvocatoriaScreen = () => {
 
     const [ value,handleInputOnChange ] = UseForm( init );
     const { asunto } = value as i_event_resp;
-    const [ hora, setHora ] = useState(moment(new Date()).hour(1).format('HH:mm'));
+    const [ hora, setHora ] = useState(moment(new Date()).minutes(30).format('HH:mm'));
     const [showTime, setShowTime] = useState(false)
 
     const dispatch = useDispatch();
