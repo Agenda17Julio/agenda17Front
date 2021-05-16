@@ -10,7 +10,7 @@ const init:i_state = {
 
 const convocatoriaReducer = (state = init, action:i_action):i_state => {
 
-    const { loadConv,loadActiveConv,activeConv,clearActiveConv } = types;
+    const { loadConv,loadActiveConv,activeConv,clearActiveConv,addConv } = types;
     const { type, payload } = action;
     
 
@@ -41,6 +41,13 @@ const convocatoriaReducer = (state = init, action:i_action):i_state => {
                 ...state,
                 active: init.active
             }
+            break;
+        case addConv:
+            if( state.actives && payload?.aux )
+                state = {
+                    ...state,
+                    actives: [ ...state.actives, payload.aux]
+                }
             break;
     }
 

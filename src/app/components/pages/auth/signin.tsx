@@ -36,30 +36,30 @@ const SigninScreen = () => {
             <form onSubmit={ handleSubmit as any }  className='form'>
 
                 <div className="input-field col s6">
-                        <i className="material-icons prefix">account_circle</i>
-                        <label htmlFor="usernameid">Username</label>
-                        <input 
-                            type="text"
-                            id="usernameid"
-                            name='username'
-                            value={ username }
+                    <i className="material-icons prefix">account_circle</i>
+                    <label htmlFor="usernameid">Username</label>
+                    <input 
+                        type="text"
+                        id="usernameid"
+                        name='username'
+                        value={ username }
+                        onChange={ handleInputOnChange }
+                        minLength={0}
+                        maxLength={30} 
+                        className="validate"
+                    />
+                </div>
+                <div className="input-field col s6">
+                    <i className="material-icons prefix">lock</i>
+                    <label htmlFor="passwordid">Password</label>
+                    <input 
+                            type="password"
+                            id="passwordid"
+                            name='password'
+                            value={ password }
                             onChange={ handleInputOnChange }
                             minLength={0}
-                            maxLength={30} 
-                            className="validate"
-                        />
-                    </div>
-                    <div className="input-field col s6">
-                        <i className="material-icons prefix">lock</i>
-                        <label htmlFor="passwordid">Password</label>
-                        <input 
-                             type="password"
-                             id="passwordid"
-                             name='password'
-                             value={ password }
-                             onChange={ handleInputOnChange }
-                             minLength={0}
-                        />
+                    />
                 </div>
 
                 <button 

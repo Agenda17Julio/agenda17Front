@@ -52,7 +52,23 @@ export const loadActiveAnnoucement = (active:i_events_convocatoria):i_action => 
     }
 }
 
+
+export const startAddAnnoucement = ( event:i_event_resp ) => async ( callback:Function ) => {
+    callback( addAnnoucement(event) );
+}
+
 export const clearActiveAnnoucement = ():i_action => {
     const { clearActiveConv:type } = types;
     return { type }
+}
+
+
+export const addAnnoucement = ( event:i_event_resp ):i_action => {
+    const { addConv:type } = types;
+    return {
+        type,
+        payload: {
+            aux: event
+        }
+    }
 }

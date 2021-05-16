@@ -2,10 +2,9 @@ import FullCalendar,{ EventSourceInput } from '@fullcalendar/react';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearActiveAnnoucement, loadActiveAnnoucement } from '../../actions/convocatoria';
-import { activePlusFab, clearActiveFab, activeEditDeleteFab } from '../../actions/fab';
+import { activePlusFab, clearActiveFab, activeEditDeleteFab, setCalendarDate,clearCalendarDate } from '../../actions/ui';
 import { i_event_calendar } from '../../interfaces/helper/calendar';
 import { i_events_convocatoria } from '../../interfaces/helper/events';
-
 import { 
     titleFormat,
     buttonText,
@@ -17,32 +16,27 @@ import {
     validRange,
     currentDate
 } from '../../helpers/calendar';
-
 import { i_argsStr } from '../../interfaces/helper/calendar';
 import { i_redux } from '../../interfaces/redux';
 
 const Calendar = ( {listEvents}:{ listEvents:EventSourceInput }) => {
    
-
     const dispatch = useDispatch();
-    const { fab,conv:{active} } = useSelector((info:i_redux) => info);
+    const { ui:{fab},conv:{active} } = useSelector((info:i_redux) => info);
+  
+    const handleOnClickDate = ({ dateStr,date }:i_argsStr) => {
 
-
-    const handleOnClickDate = ({ dateStr }:i_argsStr) => {
-
-        if( active ){
-            dispatch(clearActiveAnnoucement());
-        }
-
+        if( active ) dispatch(clearActiveAnnoucement());
+            
         if ( moment(dateStr).format('yyyy-MM-DD') < currentDate.format('yyyy-MM-DD') ) {
-            if( fab?.editDelete || fab?.plus ){
+            if( fab?.plus || fab?.edit || fab?.del ){
+                dispatch(clearCalendarDate());
                 return dispatch(clearActiveFab());
             }else {
                 return;
             }
-        }
-
-        if( !fab?.plus ){
+        }else{
+            dispatch(setCalendarDate(date));
             dispatch(activePlusFab());
         }
        
@@ -88,7 +82,7 @@ const Calendar = ( {listEvents}:{ listEvents:EventSourceInput }) => {
             dayMaxEvents={ 2 }
             themeSystem='standard'
             validRange={ validRange }
-            events={ listEvents }        
+            events={ listEvents }
         />
     </div> 
 }

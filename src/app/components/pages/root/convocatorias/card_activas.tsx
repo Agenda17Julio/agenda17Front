@@ -1,7 +1,7 @@
 import { i_event_resp } from "../../../../interfaces/resp_serv/convocatorias";
 import moment from '../../../../helpers/momentjs';
 
-const CardActiveAnnoucements = ({ id,asunto,detalle,fecha }:i_event_resp) => {
+const CardActiveAnnoucements = ({ asunto,detalle,fecha }:i_event_resp) => {
 
     const date = moment(fecha).fromNow();
 

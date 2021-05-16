@@ -8,7 +8,7 @@ export interface i_resp_active_annoucements {
 
 
 export type i_event_resp = {
-    id: string;
+    id?: string;
     adjunto: string;
     asunto: string;
     detalle: string; 
