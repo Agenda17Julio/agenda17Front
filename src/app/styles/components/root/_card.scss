@@ -1,0 +1,27 @@
+.card {
+    cursor: pointer;
+}
+
+.card-container-title{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.card-container-img{
+    width: 100%;
+    height: 35px;
+    position: relative;
+    margin-top: .5em;
+
+    & > img {
+        object-fit: cover;
+        display: block;
+        width: 35px;
+        height: inherit;
+        border-radius: 50%;
+        box-shadow: 3px 3px 7px gray;
+        position: absolute;
+        right: 0;
+    }
+}

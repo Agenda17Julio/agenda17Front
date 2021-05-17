@@ -11,16 +11,16 @@ import '../../../styles/components/auth/_signin.scss'
 const SigninScreen = () => {
 
     const init = {
-        username: 'jbpaig@gmail.com',
-        password: 'gt37285'
+        username: '',
+        password: ''
     }
 
 
     const dispatch = useDispatch();
     const { loading } = useSelector((info: i_redux) => info.ui);
 
-    const [value, handleInputOnChange] = useForm(init);
-    const { username, password } = value as i_signin;
+    const [ value, handleInputOnChange ] = useForm(init);
+    const { username, password } = value as i_signin<string>;
 
 
     const handleSubmit = (e: Event) => {
