@@ -1,26 +1,26 @@
-import { Switch,Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import ConvocatoriaRoutes from './convocatorias';
 import ActasRoutes from './actas';
-// import Navbar from '../components/ui/nav';
+import Navbar from '../components/ui/nav';
 import NotFound from '../components/pages/err/notFound';
 
 
 const MainRouter = () => <div>
-    {/* <Navbar/>  */}
-    <Switch>               
+    <Navbar />
+    <Switch>
         <Route
             path='/actas'
-            exact={ false }
-            strict={ false } 
-            component={ ActasRoutes }
+            exact={false}
+            strict={false}
+            component={ActasRoutes}
         />
         <Route
             path='/'
-            exact={ false }
-            strict={ false } 
-            component={ ConvocatoriaRoutes }
+            exact={false}
+            strict={false}
+            component={ConvocatoriaRoutes}
         />
-        
+
     </Switch>
 </div>
 
@@ -29,19 +29,19 @@ const RootRouter = () => {
 
     return <Switch>
 
-        <Route 
+        <Route
             path='/notfound'
-            exact={ true }
-            component={ NotFound }
+            exact={true}
+            component={NotFound}
         />
 
         <Route
             path='/'
-            exact={ false }
-            component={ MainRouter }
+            exact={false}
+            component={MainRouter}
         />
 
-       
+
     </Switch>
 }
 

@@ -49,7 +49,8 @@ const SigninScreen = () => {
                                 value={username}
                                 onChange={handleInputOnChange}
                                 minLength={0}
-                                maxLength={30}
+                                maxLength={30}     
+                                placeholder="Usuario"          
                             />
                         </div>
                         <div className="section_signin_form_input-field">
@@ -62,6 +63,7 @@ const SigninScreen = () => {
                                 value={password}
                                 onChange={handleInputOnChange}
                                 minLength={0}
+                                placeholder="Contraseña"   
                             />
                         </div>
                         <input type="submit" value="Iniciar Sesion" className="section_signin_form btn solid" />

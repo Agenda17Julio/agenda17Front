@@ -1,50 +1,36 @@
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { startLogout } from '../../actions/auth';
+import M,{Dropdown} from 'materialize-css'
 
 
 const NavBar = () => {
+    
     const dispatch = useDispatch();
     const handleLogout = () => dispatch(startLogout());
 
-    return <nav className="navbar is-dark" role="navigation" aria-label="main navigation">
-        <div className="navbar-brand">
-            <Link className="navbar-item" to="#">
-                <img alt="aqui hay un logo" src="https://bulma.io/images/bulma-logo-white.png" width="112" height="28" />
-            </Link>
-            <div role="button" className="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
+    M.AutoInit()
+    
+    return <div>
+        <ul id="dropdown1" className="dropdown-content">
+            <li className="navbar-item">Perfil</li>
+            <li className="divider"></li>
+            <li className="navbar-item" onClick={handleLogout}>Logout</li>
+        </ul>
+
+        <nav>
+            <div className="nav-wrapper black">
+                <a href="#" className="brand-logo">Logo</a>
+                <ul id="nav-mobile" className="right hide-on-med-and-down">
+                    <li><Link className="navbar-item" to="/">Convocatoria</Link></li>
+                    <li><Link className="navbar-item" to="/actas">Actas</Link></li>
+                    <li><a className="dropdown-trigger" href="#!" data-target="dropdown1">Dropdown<i className="material-icons right">arrow_drop_down</i></a></li>
+                </ul>
             </div>
-        </div>
+        </nav>
 
-        <div id="navbarBasicExample" className="navbar-menu">
+    </div>
 
-            <div className="navbar-end">
-
-                <Link className="navbar-item" to="/">Convocatoria</Link>
-                <Link className="navbar-item" to="/actas">Actas</Link>
-                <div className="navbar-item has-dropdown is-hoverable">
-                    <div className="navbar-link">
-                        <i className="large material-icons">account_circle</i>
-                    </div>
-
-                    <div className="navbar-dropdown">
-                        <li className="navbar-item">Perfil</li>
-                        <hr className="navbar-divider" />
-                        <li className="navbar-item" onClick={handleLogout}>Logout</li>
-
-
-                    </div>
-                </div>
-
-
-
-            </div>
-
-        </div>
-    </nav>
 }
 
 
