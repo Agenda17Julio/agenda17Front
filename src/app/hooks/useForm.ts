@@ -7,8 +7,17 @@ const UseForm = ( init:any ) => {
 
     const inputOnChange = (e:Event) => {
         const target = e.target as HTMLInputElement;
-        const { name, value, checked, type } = target;
-        const val = type === 'checkbox' ? checked : value ;
+        const { name, value, checked, type,files } = target;
+        let val:any = value;
+
+        switch( type ){
+            case 'checkbox':
+               val = checked;
+            break;
+            case 'file': 
+                val = files;
+            break;
+        }
 
         setValue((prevState:any) => ({
             ...prevState,
@@ -19,6 +28,7 @@ const UseForm = ( init:any ) => {
     return [
         value,
         inputOnChange,
+        setValue,
         reset
     ]
 }   

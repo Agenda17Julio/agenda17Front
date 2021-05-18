@@ -17,7 +17,9 @@ const types:i_types =  {
     openModal: '[MODAL] open modal',
     closeModal: '[MODAL] close modal',
     setCalendarDate: '[UI] set Calendar Date',
-    clearCalendarDate: '[UI] clear Calendar Date'
+    clearCalendarDate: '[UI] clear Calendar Date',
+    listToConv: '[CONV] set list users to annoucement',
+    clearListToConv: '[CONV] clear list users'
 }
 
 

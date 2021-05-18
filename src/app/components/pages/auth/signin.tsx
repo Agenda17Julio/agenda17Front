@@ -47,6 +47,8 @@ const SigninScreen = () => {
                         minLength={0}
                         maxLength={30} 
                         className="validate"
+                        autoComplete='off'
+                        
                     />
                 </div>
                 <div className="input-field col s6">
@@ -59,6 +61,7 @@ const SigninScreen = () => {
                             value={ password }
                             onChange={ handleInputOnChange }
                             minLength={0}
+                            autoComplete='off'
                     />
                 </div>
 

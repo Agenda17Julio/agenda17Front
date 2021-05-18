@@ -5,12 +5,13 @@ import { i_conv_state as i_state, i_conv_action as i_action } from '../interface
 const init:i_state = {
     events: undefined,
     actives: undefined,
-    active: undefined
+    active: undefined,
+    aux: undefined
 }
 
 const convocatoriaReducer = (state = init, action:i_action):i_state => {
 
-    const { loadConv,loadActiveConv,activeConv,clearActiveConv,addConv } = types;
+    const { loadConv,loadActiveConv,activeConv,clearActiveConv,addConv,listToConv,clearListToConv } = types;
     const { type, payload } = action;
     
 
@@ -48,6 +49,15 @@ const convocatoriaReducer = (state = init, action:i_action):i_state => {
                     ...state,
                     actives: [ ...state.actives, payload.aux]
                 }
+            break;
+        case listToConv:
+            state = {
+                ...state,
+                listConv: payload?.listConv
+            }
+            break;
+        case clearListToConv:
+            state  = { ...state, listConv: init.listConv } 
             break;
     }
 

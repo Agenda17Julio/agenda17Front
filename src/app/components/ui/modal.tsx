@@ -35,19 +35,16 @@ const Modal = ({ children }:DetailedHTMLProps<React.HTMLAttributes<HTMLDivElemen
         
         if( modalInstance && modal ) modalInstance.open()
 
-    },[ref,modalInstance, modal])
+    },[ref,modalInstance, modal]);
 
     return <div id="modal1" className="modal" ref={ ref }> 
         <div className="modal-content">
                 <h4>{
                     fab?.plus ? 'Crear Convocatoria' : 'Editar Convocatoria'
                 }</h4>
-                <p>A bunch of text</p>
                 { children } 
         </div>
-        <div className="modal-footer">
-            <a href="#!" className="modal-close waves-effect waves-green btn-flat">Agree</a>
-        </div>
+        
     </div>
 }
 

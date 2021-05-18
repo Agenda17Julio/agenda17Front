@@ -7,4 +7,5 @@ export interface i_token {
 export interface i_payload_token {
     uid: string;
     username: string;
+    email: string;
 }

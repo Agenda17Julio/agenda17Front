@@ -37,7 +37,7 @@ const Calendar = ( {listEvents}:{ listEvents:EventSourceInput }) => {
             }
         }else{
             dispatch(setCalendarDate(date));
-            dispatch(activePlusFab());
+            if(!fab?.plus) dispatch(activePlusFab());
         }
        
     }

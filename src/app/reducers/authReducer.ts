@@ -5,6 +5,7 @@ import { i_auth_state as i_state, i_auth_action as i_action } from '../interface
 const init:i_state = {
     uid: '',
     username: '',
+    email: '',
     checking: true
 }
 

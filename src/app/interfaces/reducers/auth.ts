@@ -1,6 +1,7 @@
 export interface i_auth_state {
     uid: string;
     username: string;
+    email: string;
     checking?: boolean;
 }
 
