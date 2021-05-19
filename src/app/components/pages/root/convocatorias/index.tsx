@@ -16,23 +16,23 @@ import ChipsSelector from '../../../ui/chips';
 
 const ConvocatoriaScreen = () => {
 
-    const { 
-        ui:{calendarDate},
-        conv:{listConv},
-        auth:{uid,username,email} 
-    } = useSelector((info:i_redux) => info );
+    const {
+        ui: { calendarDate },
+        conv: { listConv },
+        auth: { uid, username, email }
+    } = useSelector((info: i_redux) => info);
 
-    let init:i_event_resp = {
-        asunto:'',
+    let init: i_event_resp = {
+        asunto: '',
         fecha: calendarDate,
         detalle: '',
         usuario: Number(uid),
         adjunto: undefined
     }
 
-    
-    const [ value,handleInputOnChange,setValues,reset ] = UseForm( init );
-    let { asunto,fecha } = value as i_event_resp;
+
+    const [value, handleInputOnChange, setValues, reset] = UseForm(init);
+    let { asunto, fecha } = value as i_event_resp;
 
     useEffect(() => {
         init = {
@@ -41,31 +41,31 @@ const ConvocatoriaScreen = () => {
         }
         setValues(init)
         return () => reset();
-    },[ calendarDate ])
+    }, [calendarDate])
 
 
-    const [ valueEditor, setValueEditor ] = useState('');
-    const [ time, setTime ] = useState('12:00');
-    const [ showTime, setShowTime ] = useState(false);
+    const [valueEditor, setValueEditor] = useState('');
+    const [time, setTime] = useState('12:00');
+    const [showTime, setShowTime] = useState(false);
 
 
-    const handleEditor = (evt:any, editor:any) => {
-        setValueEditor(editor.getContent({format: 'html'}));
+    const handleEditor = (evt: any, editor: any) => {
+        setValueEditor(editor.getContent({ format: 'html' }));
     }
 
     const dispatch = useDispatch();
 
-    const handleUploadFiles= () => {
+    const handleUploadFiles = () => {
         (document as any).querySelector('#fileSelector').click();
     }
 
     useEffect(() => {
         dispatch(startLoadActiveAnnoucements());
-    },[dispatch]);
+    }, [dispatch]);
 
-    const handleSubmit = (e:Event) => {
+    const handleSubmit = (e: Event) => {
         e.preventDefault();
-        const [ hora, minuto ] = time.split(':');
+        const [hora, minuto] = time.split(':');
         value.detalle = valueEditor;
         value.fecha = moment(fecha).hour(Number(hora)).minute(Number(minuto)).toDate();
         value.from = {
@@ -75,61 +75,63 @@ const ConvocatoriaScreen = () => {
         value.to = listConv;
 
 
-        dispatch( startAddAnnoucement(value) )
+        dispatch(startAddAnnoucement(value))
 
     }
 
-    
+
 
     return <>
-        <div>
-            <ListConvocatorias/>
-        </div>
-        <div>
-            <Calendar/>
+        <div className="row">
+            <div className="col s12 m4 l3 xl4">
+                <ListConvocatorias />
+            </div>
+            <div className="col s12 m8 l9 xl8">
+                <Calendar />
+            </div>
         </div>
 
         <Modal>
-            <form onSubmit={ handleSubmit as any } className='modalForm'>
+            <form onSubmit={handleSubmit as any} className='modalForm'>
                 <br /><br />
 
                 <div className="input-field col s6">
                     <i className="material-icons prefix">subject</i>
                     <label htmlFor="asuntoid">Asunto</label>
-                    <input 
+                    <input
                         type="text"
                         id="asuntoid"
                         name='asunto'
-                        value={ asunto }
-                        onChange={ handleInputOnChange }
+                        value={asunto}
+                        onChange={handleInputOnChange}
                         minLength={0}
-                        maxLength={30} 
+                        maxLength={30}
                         autoComplete='off'
                     />
                 </div>
-                
+
                 <div className="input-field col s6 modalDate">
                     <i className="material-icons prefix">date_range</i>
-                    <input 
+                    <input
                         type="date"
                         id="dateid"
                         name='fecha'
-                        min={ moment(new Date()).format('YYYY-MM-DD') }
-                        value={ moment(fecha).format('YYYY-MM-DD') }
-                        onChange={ handleInputOnChange }
+                        min={moment(new Date()).format('YYYY-MM-DD')}
+                        value={moment(fecha).format('YYYY-MM-DD')}
+                        onChange={handleInputOnChange}
                     />
-                     <div id='timeid'>
-                        <i 
+                    <div id='timeid'>
+                        <i
                             className="material-icons prefix"
                             id='icontime'
                             onClick={() => setShowTime(!showTime)}
-                            >access_time
+                        >access_time
                         </i>
-                        <input 
+                        <input
                             type="text"
                             name='hora'
-                            value={ time }
-                            readOnly={ true }  
+                            value={time}
+                            readOnly={true}
                         />
                         {showTime &&
                             <TimeKeeper
@@ -145,7 +147,7 @@ const ConvocatoriaScreen = () => {
 
                 <div className="input-field col s6">
                     <i className="material-icons prefix">account_circle</i>
-                    <ChipsSelector/>
+                    <ChipsSelector />
                 </div>
 
                 <div className=' modalattachment'>
@@ -153,49 +155,49 @@ const ConvocatoriaScreen = () => {
                         <i className="material-icons prefix">edit</i>
                         <label htmlFor="">Detalle</label>
                     </div>
-                    <div  className='input-field col s6 attachment'>
-                        <i 
+                    <div className='input-field col s6 attachment'>
+                        <i
                             className="material-icons prefix "
-                            onClick={ handleUploadFiles }
-                            >attach_file
+                            onClick={handleUploadFiles}
+                        >attach_file
                         </i>
 
-                        <input 
-                            type="file" 
+                        <input
+                            type="file"
                             id='fileSelector'
-                            name="adjunto" 
-                            onChange={ handleInputOnChange }
-                            multiple={ true }
-                            style={{display:'none'}}
+                            name="adjunto"
+                            onChange={handleInputOnChange}
+                            multiple={true}
+                            style={{ display: 'none' }}
                         />
                     </div>
                 </div>
 
-                <div className="input-field col s6 modaleditor">       
+                <div className="input-field col s6 modaleditor">
                     <Editor
                         id='detalleid'
-                        value={ valueEditor }
-                        onEditorChange={ handleEditor }
+                        value={valueEditor}
+                        onEditorChange={handleEditor}
                         outputFormat='html'
-                        init={ config }
+                        init={config}
                     />
                 </div>
-                
+
                 <div>
-                    <button 
+                    <button
                         type="submit"
                         className='btn waves-effect waves-light primary'
-                        >Agendar
-                    </button> 
+                    >Agendar
+                    </button>
 
-                    <button 
+                    <button
                         type="button"
                         className='btn waves-effect waves-light red lighten-2 primary'
-                        >Cancelar
-                    </button> 
+                    >Cancelar
+                    </button>
                 </div>
             </form>
-            
+
         </Modal>
     </>
 }

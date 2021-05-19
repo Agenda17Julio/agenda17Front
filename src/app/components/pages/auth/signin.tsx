@@ -34,7 +34,6 @@ const SigninScreen = () => {
 
     return <section className='signin_section_main_contenedor'>
 
-<<<<<<< HEAD
         <div className="signin_section_container">
             <div className="signin_section_container_forms-container">
                 <div className="signin_section_container_forms-container_signin-signup">
@@ -69,36 +68,6 @@ const SigninScreen = () => {
                         </div>
                         <input type="submit" value="Iniciar Sesion" className="section_signin_form btn solid" />
                     </form>
-=======
-                <div className="input-field col s6">
-                    <i className="material-icons prefix">account_circle</i>
-                    <label htmlFor="usernameid">Username</label>
-                    <input 
-                        type="text"
-                        id="usernameid"
-                        name='username'
-                        value={ username }
-                        onChange={ handleInputOnChange }
-                        minLength={0}
-                        maxLength={30} 
-                        className="validate"
-                        autoComplete='off'
-                        
-                    />
-                </div>
-                <div className="input-field col s6">
-                    <i className="material-icons prefix">lock</i>
-                    <label htmlFor="passwordid">Password</label>
-                    <input 
-                            type="password"
-                            id="passwordid"
-                            name='password'
-                            value={ password }
-                            onChange={ handleInputOnChange }
-                            minLength={0}
-                            autoComplete='off'
-                    />
->>>>>>> master
                 </div>
             </div>
         </div>

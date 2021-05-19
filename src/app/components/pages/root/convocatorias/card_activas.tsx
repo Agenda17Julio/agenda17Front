@@ -6,7 +6,7 @@ const CardActiveAnnoucements = ({ asunto,detalle,fecha }:i_event_resp) => {
     const date = moment(fecha).fromNow();
 
     return  <div className="row">
-    <div className="col s12 m6">
+    <div className="col s12">
       <div className="card grey lighten-5">
         <div className="card-content">
             <div className="card-container-title">

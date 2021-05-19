@@ -5,21 +5,27 @@ import CardConvocatoria from './card_activas';
 
 const ListConvocatorias = () => {
 
-    const { actives } = useSelector((info:i_redux) => info.conv);
+    const { actives } = useSelector((info: i_redux) => info.conv);
     const conv_actives = actives as Array<i_event_resp>;
 
+
+
     return <div className='list_container'>
-        <div className="section_header">
-            <p>Convocatorias Activas</p>
-            <p>Ver todo</p>
+        <div className="section_header row">
+            <div className="first col s6">
+                <p>Convocatorias Activas</p>
+            </div>
+            <div className="second col s6">
+                <p>Ver todo</p>
+            </div>
         </div>
         <div className="section_body">
             {
-                conv_actives?.map((conv:i_event_resp) => {
+                conv_actives?.map((conv: i_event_resp) => {
                     const { id } = conv;
                     return <CardConvocatoria
-                        key={ id }
-                        { ...conv }
+                        key={id}
+                        {...conv}
                     />
                 })
             }
