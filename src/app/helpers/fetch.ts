@@ -27,23 +27,23 @@ export const fetchWithoutToken = async (info:i_fetch):Promise<Response> => {
 export const fetchWithToken = async (info:i_fetch):Promise<Response> => {
     try {
 
-        const { method, data } = info;
+        let { method, data,headers } = info;
         const url = `${baseURL}${info.url}`;
 
         const token = localStorage.getItem('x-token') || '' ;
 
-        const headers:any = {
-            'Content-Type': 'application/json',
+        headers = {
+            ...headers,
             'X-Token': token
         }
-
+        
         if( !method ){
             return fetch( url, { headers } );
         }else {
             return fetch(url,{
                 headers,
                 method,
-                body: JSON.stringify(data)
+                body:data
             })
         }
 

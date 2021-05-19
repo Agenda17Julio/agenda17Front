@@ -24,3 +24,46 @@
         position: absolute;
     }
 }
+
+
+.modal {
+    padding: 3em;
+}
+
+.modaleditor{
+    margin-top: 3em;
+}
+
+#timepeekerid, #datepicker{
+    border: none;
+    box-shadow: none;
+}
+
+.modalDate{
+    display: flex;
+    justify-content: space-between;
+
+    & > #dateid {
+        width: 45%;
+    }
+
+    & > #timeid {
+        width: 45%;
+    }
+}
+
+#icontime {
+    cursor: pointer;
+}
+
+.modalattachment{
+    margin-bottom: 3em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    & > .attachment {
+        cursor: pointer;
+        margin-right: 2em;
+    }
+}

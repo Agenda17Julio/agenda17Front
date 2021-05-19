@@ -2,7 +2,7 @@ export interface i_ui_state {
     loading?: boolean;
     modal?: boolean;
     fab?: i_fab_state;
-    calendarDate?: Date;
+    calendarDate: Date;
 }
 
 export interface i_ui_action {

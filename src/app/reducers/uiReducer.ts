@@ -9,7 +9,7 @@ const init:i_state = {
         edit: undefined,
         del: undefined
     },
-    calendarDate: undefined
+    calendarDate: new Date()
 }
 
 const uiReducer = ( state = init, action: i_action ):i_state => {
@@ -70,10 +70,11 @@ const uiReducer = ( state = init, action: i_action ):i_state => {
             };
             break;
         case setCalendarDate:
-            state = {
-                ...state,
-                calendarDate: payload?.calendarDate
-            }
+            if(payload)
+                state = {
+                    ...state,
+                    calendarDate: payload?.calendarDate
+                }
             break;
         case clearCalendarDate:
             state = {

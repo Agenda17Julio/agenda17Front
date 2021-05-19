@@ -9,3 +9,16 @@
 main {
     width: 100%;
 }
+
+
+
+input[type="time"] {
+    cursor: pointer;
+    &::-webkit-calendar-picker-indicator {
+        background: none;
+    }
+}
+
+.tox-dialog {
+    z-index: 100;
+}
