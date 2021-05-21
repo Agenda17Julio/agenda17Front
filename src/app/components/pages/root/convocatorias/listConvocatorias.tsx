@@ -12,10 +12,10 @@ const ListConvocatorias = () => {
 
     return <div className='list_container'>
         <div className="section_header row">
-            <div className="first col s6">
+            <div className="col s6 m12 l6 lx6 left-align">
                 <p>Convocatorias Activas</p>
             </div>
-            <div className="second col s6">
+            <div className="col s6 m12 l6 lx6 right-align">
                 <p>Ver todo</p>
             </div>
         </div>

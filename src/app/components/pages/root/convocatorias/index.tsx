@@ -91,36 +91,41 @@ const ConvocatoriaScreen = () => {
             </div>
         </div>
 
-        <Modal>
-            <form onSubmit={handleSubmit as any} className='modalForm'>
-                <br /><br />
-
-                <div className="input-field col s6">
-                    <i className="material-icons prefix">subject</i>
-                    <label htmlFor="asuntoid">Asunto</label>
-                    <input
-                        type="text"
-                        id="asuntoid"
-                        name='asunto'
-                        value={asunto}
-                        onChange={handleInputOnChange}
-                        minLength={0}
-                        maxLength={30}
-                        autoComplete='off'
-                    />
+        <Modal><div className="row">
+            <form onSubmit={handleSubmit as any} className='col s12'>
+                <br />   <br />
+                <div className="row col s12">
+                    <div className="input-field col s12">
+                        <i className="material-icons prefix">subject</i>
+                        <label htmlFor="asuntoid">Asunto</label>
+                        <input
+                            type="text"
+                            id="asuntoid"
+                            name='asunto'
+                            value={asunto}
+                            onChange={handleInputOnChange}
+                            minLength={0}
+                            maxLength={30}
+                            autoComplete='off'
+                        />
+                    </div>
                 </div>
 
-                <div className="input-field col s6 modalDate">
-                    <i className="material-icons prefix">date_range</i>
-                    <input
-                        type="date"
-                        id="dateid"
-                        name='fecha'
-                        min={moment(new Date()).format('YYYY-MM-DD')}
-                        value={moment(fecha).format('YYYY-MM-DD')}
-                        onChange={handleInputOnChange}
-                    />
-                    <div id='timeid'>
+                
+           
+                <div className="input-field row col s12 modalDate">
+                    <div className="inputFecha col s6">
+                        <i className="material-icons prefix">date_range</i>
+                        <input
+                            type="date"
+                            id="dateid"
+                            name='fecha'
+                            min={moment(new Date()).format('YYYY-MM-DD')}
+                            value={moment(fecha).format('YYYY-MM-DD')}
+                            onChange={handleInputOnChange}
+                        />
+                    </div>
+                    <div id='timeid' className="col s6">
                         <i
                             className="material-icons prefix"
                             id='icontime'
@@ -144,10 +149,13 @@ const ConvocatoriaScreen = () => {
                     </div>
                 </div>
 
+               
 
-                <div className="input-field col s6">
-                    <i className="material-icons prefix">account_circle</i>
+                <div className="input-field row col s12">
+                    <div className="col s12">
+                    <i className="material-icons prefix conl s12">account_circle</i>
                     <ChipsSelector />
+                    </div>
                 </div>
 
                 <div className=' modalattachment'>
@@ -173,7 +181,7 @@ const ConvocatoriaScreen = () => {
                     </div>
                 </div>
 
-                <div className="input-field col s6 modaleditor">
+                <div className="input-field col s12 modaleditor">
                     <Editor
                         id='detalleid'
                         value={valueEditor}
@@ -196,8 +204,9 @@ const ConvocatoriaScreen = () => {
                     >Cancelar
                     </button>
                 </div>
-            </form>
 
+            </form>
+        </div>
         </Modal>
     </>
 }
