@@ -65,6 +65,7 @@ export const startChecking = () => async ( callback:Function ) => {
         localStorage.setItem('x-token', token);
         const { payload } = decode(token) as i_token;
         callback( login(payload) );
+        
     } else {
         callback( startLogout() );
     }

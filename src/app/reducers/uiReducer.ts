@@ -9,12 +9,13 @@ const init:i_state = {
         edit: undefined,
         del: undefined
     },
-    calendarDate: new Date()
+    calendarDate: new Date(),
+    pagina: 1
 }
 
 const uiReducer = ( state = init, action: i_action ):i_state => {
     const { startLoading, stopLoading,openModal,closeModal,setCalendarDate,
-        activePlusFab,activeEditFab,clearActiveFab,clearCalendarDate } = types;
+        activePlusFab,activeEditFab,clearActiveFab,clearCalendarDate,setPag, clearPag } = types;
     
     const { type,payload } = action;
 
@@ -80,6 +81,19 @@ const uiReducer = ( state = init, action: i_action ):i_state => {
             state = {
                 ...state,
                 calendarDate: init.calendarDate
+            }
+            break;
+        case setPag:
+            if(payload?.pagina)
+                state = {
+                    ...state, 
+                    pagina: payload.pagina
+                }
+            break;
+        case clearPag:
+            state = {
+                ...state,
+                pagina: init.pagina
             }
             break;
     }

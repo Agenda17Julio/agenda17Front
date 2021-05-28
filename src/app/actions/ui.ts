@@ -59,8 +59,27 @@ export const setCalendarDate = ( date:Date ):i_action => {
     }
 }
 
+
 export const clearCalendarDate = ():i_action => {
     const { clearCalendarDate:type } = types;
+    return {
+        type
+    }
+}
+
+
+export const setPagina = (pagina: number):i_action => {
+    const { setPag:type } = types;
+    return {
+        type,
+        payload: {
+            pagina
+        }
+    }
+}
+
+export const clearPagina = ():i_action => {
+    const { clearPag:type } = types;
     return {
         type
     }
