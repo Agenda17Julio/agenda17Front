@@ -10,7 +10,7 @@ import { i_redux } from '../interfaces/redux';
 const Materialize = (ref:any, ref_chip:any) => {
 
     const dispatch = useDispatch();
-    const { ui:{ modal }, conv: { users } } = useSelector((info:i_redux) => info);
+    const { ui:{ modal }, conv: { users,active } } = useSelector((info:i_redux) => info);
     const mapData = (data:Array<any>) => data.map((elem:any) => elem.tag);
     const usuarios = users as string[];
     let data_usr:any = {}
@@ -52,7 +52,14 @@ const Materialize = (ref:any, ref_chip:any) => {
             minLength: 1
         },
         limit:	                Infinity,
-        onChipAdd: () => dispatch(setListConv(mapData(instanceChips.chipsData))),
+        onChipAdd: () => { 
+            instanceChips.chipsData.forEach(({tag}:{tag:string}, index:number) => {
+                if(!validateEmail(tag)){
+                    instanceChips.deleteChip( index );
+                }
+            })
+            dispatch(setListConv(mapData(instanceChips.chipsData)))
+        },
         onChipSelect: () => {},
         onChipDelete: () => dispatch(setListConv(mapData(instanceChips.chipsData))),
           
@@ -62,15 +69,28 @@ const Materialize = (ref:any, ref_chip:any) => {
         modalInstance = M.Modal.init(ref.current, opciones);    
         instanceChips = M.Chips.init(ref_chip.current, opcionesChips);
         instanceChips.autocomplete.options.data = data_usr;
+
+
+        if( active?.to ){
+            for (const i in active.to) {
+                instanceChips.addChip({tag:active.to[i]})
+            }
+        }
         
         if( modal ) modalInstance.open();
 
         return () => {
-            modalInstance && modalInstance.destroy();
-            instanceChips && instanceChips.destroy();
+            modalInstance.destroy();
+            instanceChips.destroy();
         };
-    },[ref,modal,ref_chip]);
 
+    },[ref,modal,ref_chip]);
+}
+
+
+function validateEmail(email:string) {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
 }
 
 

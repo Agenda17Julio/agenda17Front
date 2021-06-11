@@ -1,7 +1,6 @@
-import M, { ChipsOptions, ModalOptions } from "materialize-css";
 import { createPortal } from 'react-dom'
 import { useEffect, useRef,useState } from "react";
-import { startAddAnnoucement,clearListConv, setListConv } from "../../actions/convocatoria";
+import { startAddAnnoucement,clearListConv, setListConv, startUpdateAnnoucement } from "../../actions/convocatoria";
 import { clearActiveFab, clearCalendarDate, closeModal } from "../../actions/ui";
 import { i_redux } from "../../interfaces/redux";
 import { useDispatch, useSelector } from 'react-redux';
@@ -44,7 +43,13 @@ const Modal = () => {
     const [ value,handleInputOnChange,setValues,reset ] = UseForm( init );
     let { asunto,fecha } = value as i_event_resp;
 
+    const [ valueEditor, setValueEditor ] = useState('');
+    const [ time, setTime ] = useState(moment(new Date).minutes(30).format('HH:mm'));
+    const [ showTime, setShowTime ] = useState(false);
+
+
     useEffect(() => {
+        
         init = {
             ...init,
             fecha: calendarDate || new Date
@@ -58,16 +63,16 @@ const Modal = () => {
                 usuario: active.usuario,
                 adjunto: active.adjunto
             }
+            setTime(moment(active.fecha).format('HH:mm'));
+            setValueEditor(active.detalle)
+
         }
         setValues(init)
         return () => reset();
     },[ calendarDate, active ])
 
-
-    const [ valueEditor, setValueEditor ] = useState('');
-    const [ time, setTime ] = useState('12:00');
-    const [ showTime, setShowTime ] = useState(false);
-
+    MaterializeHelper(ref, ref_chip);
+   
 
     const handleEditor = (evt:any, editor:any) => {
         setValueEditor(editor.getContent({format: 'html'}));
@@ -89,17 +94,19 @@ const Modal = () => {
 
         value.to = listConv;
 
-
-        dispatch( startAddAnnoucement(value) );
+        if( active ){
+            value.id = active.id;
+            dispatch( startUpdateAnnoucement(value) );
+        }else {
+            dispatch( startAddAnnoucement(value) );
+        }
         dispatch( clearActiveFab() );
         dispatch( clearListConv() );
-        dispatch( closeModal() )
+        dispatch( closeModal() );
         setValueEditor('');
+        (document as any).querySelector('#fileSelector').value='';
         reset();
     }
-
-
-    MaterializeHelper(ref, ref_chip);
 
     return createPortal( <div id="modal1" className="modal" ref={ ref }> 
         <div className="modal-content">
@@ -112,11 +119,12 @@ const Modal = () => {
 
                 <div className="input-field col s6">
                     <i className="material-icons prefix">subject</i>
-                    <label htmlFor="asuntoid">Asunto</label>
+                    {/* <label htmlFor="asuntoid">Asunto</label> */}
                     <input 
                         type="text"
                         id="asuntoid"
                         name='asunto'
+                        placeholder='Asunto'
                         value={ asunto }
                         onChange={ handleInputOnChange }
                         minLength={0}
@@ -131,7 +139,7 @@ const Modal = () => {
                         type="date"
                         id="dateid"
                         name='fecha'
-                        min={ moment(new Date()).format('YYYY-MM-DD') }
+                        min={ active ? '' :moment(new Date()).format('YYYY-MM-DD') }
                         value={ moment(fecha).format('YYYY-MM-DD') }
                         onChange={ handleInputOnChange }
                     />

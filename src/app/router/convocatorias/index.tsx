@@ -1,6 +1,6 @@
 import { Switch, Route, Redirect } from 'react-router-dom';
 import ConvocatoriaScreen from '../../components/pages/root/convocatorias';
-import AllConv from '../../components/pages/root/convocatorias/all_Convocatoras';
+import AllConv from '../../components/pages/root/convocatorias/all_convocatorias';
 
 const ConvocatoriaRoutes = () => {
     return <>

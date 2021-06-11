@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import Calendar from '../../../ui/calendar';
 import { useDispatch, useSelector } from 'react-redux';
 import { i_redux } from '../../../../interfaces/redux';
@@ -24,6 +25,7 @@ const ConvocatoriaScreen = () => {
             return active;
         }) : [];
 
+    
         
     return <div className='convocatoria_container'>
         <Calendar listEvents={ eventsActives }/>

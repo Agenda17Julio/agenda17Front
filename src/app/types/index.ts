@@ -11,8 +11,10 @@ const types:i_types =  {
     activeConv: '[CONV] set active announcement',
     clearActiveConv: '[CONV] clear active annoucement',
     addConv: '[CONV] add annoucement',
+    typeListConv: '[CONV] set type of annoucement',
     deleteActiveConv: '[CONV] delete annoucement active',
     getUsers: '[CONV] get users',
+    updateActiveConv: '[CONV] update annoucement',
     activePlusFab: '[FAB] active plus fab',
     activeEditFab: '[FAB] active edit fab',
     clearActiveFab: '[FAB] clear active fab',
@@ -23,7 +25,8 @@ const types:i_types =  {
     listToConv: '[CONV] set list users to annoucement',
     clearListToConv: '[CONV] clear list users',
     setPag: '[UI] set Paginación',
-    clearPag: '[UI] clear Paginación'
+    clearPag: '[UI] clear Paginación',
+    resetPag: '[UI] reset pag'
 }
 
 

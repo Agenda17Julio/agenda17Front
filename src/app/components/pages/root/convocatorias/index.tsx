@@ -12,9 +12,8 @@ const ConvocatoriaScreen = () => {
     useEffect(() => {
         dispatch(startGetUsers());
         dispatch(startLoadActiveAnnoucements());
-    });
+    },[]);
 
-    
 
     return <>
         <div>

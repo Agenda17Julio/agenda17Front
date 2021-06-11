@@ -3,16 +3,13 @@ import { i_conv_state as i_state, i_conv_action as i_action } from '../interface
 
 
 const init:i_state = {
-    convocatorias: undefined,
-    actives: undefined,
-    aux: undefined,
-    users: undefined
+    typeList: 'all'
 }
 
 const convocatoriaReducer = (state = init, action:i_action):i_state => {
 
     const { loadConv,loadActiveConv,activeConv,clearActiveConv,addConv,
-        listToConv,clearListToConv,deleteActiveConv,getUsers } = types;
+        listToConv,clearListToConv,deleteActiveConv,getUsers,typeListConv,updateActiveConv } = types;
     const { type, payload } = action;
     
 
@@ -22,6 +19,13 @@ const convocatoriaReducer = (state = init, action:i_action):i_state => {
                 state = {
                     ...state,
                     convocatorias: payload.convocatorias
+                }
+            break;
+        case typeListConv:
+            if( payload )
+                state = {
+                    ...state,
+                    typeList: payload.typeList
                 }
             break;
         case loadActiveConv:
@@ -36,7 +40,7 @@ const convocatoriaReducer = (state = init, action:i_action):i_state => {
                 state = {
                     ...state,
                     actives: state.actives?.filter(conv => {
-                        if(conv.id != payload.aux?.id) return conv;
+                        if(conv.id !== payload.aux?.id) return conv;
                     }) 
                 }
             break;
@@ -52,6 +56,19 @@ const convocatoriaReducer = (state = init, action:i_action):i_state => {
                 ...state,
                 active: init.active
             }
+            break;
+        case updateActiveConv:
+            if(payload?.aux) 
+                state = {
+                    ...state,
+                    actives: state.actives?.map(conv => {
+                        if(conv.id == payload.aux?.id ){
+                            return payload.aux as any
+                        } else {
+                            return conv;
+                        }
+                    }) 
+                }
             break;
         case addConv:
             if( state.actives && payload?.aux )

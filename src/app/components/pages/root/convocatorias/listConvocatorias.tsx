@@ -1,3 +1,4 @@
+import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { clearActiveFab } from "../../../../actions/ui";
@@ -18,6 +19,15 @@ const ListConvocatorias = () => {
         }
     }
 
+    let convocatorias:any = [];
+
+    const actual = moment(new Date());
+    if(conv_actives) 
+        convocatorias = conv_actives?.filter(({fecha}) => { 
+            return moment(fecha).isBetween(moment(actual), actual.add(1,'day').minute(0).hour(0).format('YYYY-MM-DD HH:mm'));
+        })
+        
+
     return <div className='list_container'>
         <div className="section_header">
             <p>Convocatorias Activas</p>
@@ -25,10 +35,9 @@ const ListConvocatorias = () => {
         </div>
         <div className="section_body">
             {
-                conv_actives?.map((conv:i_event_resp) => {
-                    const { id } = conv;
+                convocatorias?.map((conv:i_event_resp) => {
                     return <CardConvocatoria
-                        key={ id }
+                        key={ conv.id }
                         { ...conv }
                     />
                 })

@@ -19,7 +19,7 @@ import {
 import { i_argsStr } from '../../interfaces/helper/calendar';
 import { i_redux } from '../../interfaces/redux';
 
-const Calendar = ( {listEvents}:{ listEvents:EventSourceInput }) => {
+const Calendar = ( {listEvents}:{ listEvents:any }) => {
    
     const dispatch = useDispatch();
     const { ui:{fab},conv:{active} } = useSelector((info:i_redux) => info);
