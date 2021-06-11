@@ -69,7 +69,7 @@ const Materialize = (ref:any, ref_chip:any) => {
         modalInstance = M.Modal.init(ref.current, opciones);    
         instanceChips = M.Chips.init(ref_chip.current, opcionesChips);
         instanceChips.autocomplete.options.data = data_usr;
-
+        
 
         if( active?.to ){
             for (const i in active.to) {

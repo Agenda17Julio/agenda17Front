@@ -9,7 +9,6 @@ import CardConvocatoria from './card_activas';
 const ListConvocatorias = () => {
 
     const { actives } = useSelector((info:i_redux) => info.conv);
-    const conv_actives = actives as Array<i_event_resp>;
     const dispatch = useDispatch();
     const { fab } = useSelector((info:i_redux) => info.ui);
 
@@ -19,14 +18,14 @@ const ListConvocatorias = () => {
         }
     }
 
-    let convocatorias:any = [];
-
-    const actual = moment(new Date());
-    if(conv_actives) 
-        convocatorias = conv_actives?.filter(({fecha}) => { 
-            return moment(fecha).isBetween(moment(actual), actual.add(1,'day').minute(0).hour(0).format('YYYY-MM-DD HH:mm'));
-        })
-        
+    let convocatorias = actives as Array<i_event_resp>;
+    
+    // const actual = moment(new Date());
+    // if( actives ) {
+    //     convocatorias = actives?.filter(({fecha}) => { 
+    //         return moment(fecha).isBetween(moment(actual), actual.add(1,'day').minute(0).hour(0).format('YYYY-MM-DD HH:mm'));
+    //     })
+    // }
 
     return <div className='list_container'>
         <div className="section_header">

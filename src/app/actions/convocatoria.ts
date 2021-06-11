@@ -12,6 +12,9 @@ export const startLoadAnnoucements = ( pagina:number ) => async ( callback:Funct
     const {ok, data, registros } = await resp.json();
 
     if( ok ){
+        for (const i in data) {
+            data[i].to = JSON.parse(data[i].to as any);
+        }
         callback( loadAnnouncement(data, registros[0].registros ) );
     }
 

@@ -40,7 +40,7 @@ const convocatoriaReducer = (state = init, action:i_action):i_state => {
                 state = {
                     ...state,
                     actives: state.actives?.filter(conv => {
-                        if(conv.id !== payload.aux?.id) return conv;
+                        if(conv.id?.toString() !== payload.aux?.id?.toString()) return conv;
                     }) 
                 }
             break;
@@ -58,7 +58,7 @@ const convocatoriaReducer = (state = init, action:i_action):i_state => {
             }
             break;
         case updateActiveConv:
-            if(payload?.aux) 
+            if(payload?.aux && state.actives) {
                 state = {
                     ...state,
                     actives: state.actives?.map(conv => {
@@ -69,6 +69,21 @@ const convocatoriaReducer = (state = init, action:i_action):i_state => {
                         }
                     }) 
                 }
+            } else if( state.convocatorias && payload?.aux ){
+                state = {
+                    ...state,
+                    convocatorias: {
+                        data: state.convocatorias.data.map(conv => {
+                            if(conv.id == payload.aux?.id ){
+                                return payload.aux as any
+                            } else {
+                                return conv;
+                            }
+                        }),
+                        registros: state.convocatorias.registros
+                    }
+                }
+            }
             break;
         case addConv:
             if( state.actives && payload?.aux )
