@@ -14,6 +14,7 @@ const types:i_types =  {
     typeListConv: '[CONV] set type of annoucement',
     deleteActiveConv: '[CONV] delete annoucement active',
     getUsers: '[CONV] get users',
+    showFile: '[UI] show file',
     updateActiveConv: '[CONV] update annoucement',
     activePlusFab: '[FAB] active plus fab',
     activeEditFab: '[FAB] active edit fab',

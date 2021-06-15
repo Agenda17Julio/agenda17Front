@@ -14,7 +14,6 @@ const ConvocatoriaScreen = () => {
         dispatch(startLoadActiveAnnoucements());
     },[]);
 
-
     return <>
         <div>
             <ListConvocatorias/>

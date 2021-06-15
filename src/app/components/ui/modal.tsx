@@ -1,7 +1,7 @@
 import { createPortal } from 'react-dom'
 import { useEffect, useRef,useState } from "react";
-import { startAddAnnoucement,clearListConv, setListConv, startUpdateAnnoucement } from "../../actions/convocatoria";
-import { clearActiveFab, clearCalendarDate, closeModal } from "../../actions/ui";
+import { startAddAnnoucement,clearListConv, startUpdateAnnoucement,startDownload } from "../../actions/convocatoria";
+import { clearActiveFab, closeModal } from "../../actions/ui";
 import { i_redux } from "../../interfaces/redux";
 import { useDispatch, useSelector } from 'react-redux';
 import { i_event_resp } from '../../interfaces/helper/events';
@@ -19,7 +19,6 @@ const Modal = () => {
 
     const ref = useRef<any>(null);
     const ref_chip = useRef<any>(null);
-   
     const dispatch = useDispatch();
     const { ui:{fab}, conv: { active } } = useSelector((info:i_redux) => info);
 
@@ -41,11 +40,12 @@ const Modal = () => {
 
     
     const [ value,handleInputOnChange,setValues,reset ] = UseForm( init );
-    let { asunto,fecha } = value as i_event_resp;
+    let { asunto,fecha,adjunto } = value as i_event_resp;
 
     const [ valueEditor, setValueEditor ] = useState('');
     const [ time, setTime ] = useState(moment(new Date).minutes(30).format('HH:mm'));
     const [ showTime, setShowTime ] = useState(false);
+    const input = (document as any).querySelector('#fileSelector') as HTMLInputElement;
 
 
     useEffect(() => {
@@ -78,10 +78,9 @@ const Modal = () => {
         setValueEditor(editor.getContent({format: 'html'}));
     }
 
-    const handleUploadFiles= () => {
-        (document as any).querySelector('#fileSelector').click();
-    }
+    const handleUploadFiles= () => input.click();
 
+  
     const handleSubmit = (e:Event) => {
         e.preventDefault();
         const [ hora, minuto ] = time.split(':');
@@ -178,22 +177,6 @@ const Modal = () => {
                         <i className="material-icons prefix">edit</i>
                         <label htmlFor="">Detalle</label>
                     </div>
-                    <div  className='input-field col s6 attachment'>
-                        <i 
-                            className="material-icons prefix "
-                            onClick={ handleUploadFiles }
-                            >attach_file
-                        </i>
-
-                        <input 
-                            type="file" 
-                            id='fileSelector'
-                            name="adjunto" 
-                            onChange={ handleInputOnChange }
-                            multiple={ true }
-                            style={{display:'none'}}
-                        />
-                    </div>
                 </div>
 
                 <div className="input-field col s6 modaleditor">       
@@ -204,6 +187,44 @@ const Modal = () => {
                         outputFormat='html'
                         init={ config }
                     />
+                </div>
+
+
+                <div className=' modalattachment'>
+                  
+                    <div  className='input-field col s6 attachment'>
+                        <i 
+                            className="material-icons prefix "
+                            onClick={ handleUploadFiles }
+                            >attach_file
+                        </i>
+                        <label htmlFor="">Adjuntos</label>
+
+                        <input 
+                            type="file" 
+                            id='fileSelector'
+                            name="adjunto" 
+                            onChange={ handleInputOnChange }
+                            multiple={ true }
+                            style={{display:'none'}}
+                        />
+                        <br /><br /><br />
+                        <div>
+                            {
+                                active ? active.files?.map((f,index) => <div
+                                    onClick={ () => startDownload(String(active.id), f) }
+                                    key={index}> { f }
+                                    
+                                </div> ) : adjunto && Array.from(adjunto).map((file:any) => <div 
+                                    key={file.name}>
+                                        {file.name}
+                                </div>)  
+                                
+                            }
+                            
+                            {/*  */}
+                        </div>
+                    </div>
                 </div>
                 
                 <div>

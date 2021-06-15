@@ -310,3 +310,26 @@ export const setTypeList = (typeList:tipo_recurso):i_action => {
         }
     }
 }
+
+
+export const startDownload = async (id:string, filename: string) => {
+    const resp = await fetchWithToken({url:`/convocatoria/files/${id}/${filename}`});
+    const file = await resp.blob();
+
+    // const url = URL.createObjectURL(file);
+    // const tabOrWindow = window.open(`${url.normalize()}${filename}`, '_blank') as Window;
+    // tabOrWindow.focus();
+    // console.log(url)
+
+    const a = document.createElement('a');
+    document.body.appendChild(a);
+    const url = window.URL.createObjectURL(file);
+    a.href = url;
+    a.download = filename;
+    a.click();
+
+    setTimeout(() => {
+        URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+    }, 0)
+}

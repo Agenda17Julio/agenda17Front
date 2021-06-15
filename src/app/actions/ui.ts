@@ -1,5 +1,5 @@
 import types from '../types';
-import { i_ui_action as i_action } from '../interfaces/reducers/ui';
+import { i_ui_action as i_action,i_showfile } from '../interfaces/reducers/ui';
 
 export const startLoading = ():i_action => {
     const { startLoading:type } = types;
