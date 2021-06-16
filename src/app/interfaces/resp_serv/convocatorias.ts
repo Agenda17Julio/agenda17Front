@@ -19,4 +19,6 @@ export type i_event_resp = {
         address: string;
     };
     to?: Array<string>;
+    files?:Array<string>;
 }
+
