@@ -1,6 +1,6 @@
 import { createPortal } from 'react-dom'
-import { useEffect, useRef,useState } from "react";
-import { startAddAnnoucement,clearListConv, startUpdateAnnoucement,startDownload } from "../../actions/convocatoria";
+import { useEffect, useRef, useState } from "react";
+import { startAddAnnoucement, clearListConv, startUpdateAnnoucement, startDownload } from "../../actions/convocatoria";
 import { clearActiveFab, closeModal } from "../../actions/ui";
 import { i_redux } from "../../interfaces/redux";
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,42 +20,42 @@ const Modal = () => {
     const ref = useRef<any>(null);
     const ref_chip = useRef<any>(null);
     const dispatch = useDispatch();
-    const { ui:{fab}, conv: { active } } = useSelector((info:i_redux) => info);
+    const { ui: { fab }, conv: { active } } = useSelector((info: i_redux) => info);
 
 
-    const { 
-        ui:{calendarDate},
-        conv:{listConv},
-        auth:{uid,username,email} 
-    } = useSelector((info:i_redux) => info );
+    const {
+        ui: { calendarDate },
+        conv: { listConv },
+        auth: { uid, username, email }
+    } = useSelector((info: i_redux) => info);
 
 
-    let init:i_event_resp = {
-        asunto:'',
+    let init: i_event_resp = {
+        asunto: '',
         fecha: calendarDate || new Date(),
         detalle: '',
         usuario: Number(uid),
         adjunto: undefined
-    }  
+    }
 
-    
-    const [ value,handleInputOnChange,setValues,reset ] = UseForm( init );
-    let { asunto,fecha,adjunto } = value as i_event_resp;
 
-    const [ valueEditor, setValueEditor ] = useState('');
-    const [ time, setTime ] = useState(moment(new Date).minutes(30).format('HH:mm'));
-    const [ showTime, setShowTime ] = useState(false);
+    const [value, handleInputOnChange, setValues, reset] = UseForm(init);
+    let { asunto, fecha, adjunto } = value as i_event_resp;
+
+    const [valueEditor, setValueEditor] = useState('');
+    const [time, setTime] = useState(moment(new Date).minutes(30).format('HH:mm'));
+    const [showTime, setShowTime] = useState(false);
     const input = (document as any).querySelector('#fileSelector') as HTMLInputElement;
 
 
     useEffect(() => {
-        
+
         init = {
             ...init,
             fecha: calendarDate || new Date
         }
 
-        if( active ) {
+        if (active) {
             init = {
                 asunto: active.asunto,
                 fecha: active.fecha,
@@ -69,21 +69,21 @@ const Modal = () => {
         }
         setValues(init)
         return () => reset();
-    },[ calendarDate, active ])
+    }, [calendarDate, active])
 
     MaterializeHelper(ref, ref_chip);
-   
 
-    const handleEditor = (evt:any, editor:any) => {
-        setValueEditor(editor.getContent({format: 'html'}));
+
+    const handleEditor = (evt: any, editor: any) => {
+        setValueEditor(editor.getContent({ format: 'html' }));
     }
 
-    const handleUploadFiles= () => input.click();
+    const handleUploadFiles = () => input.click();
 
-  
-    const handleSubmit = (e:Event) => {
+
+    const handleSubmit = (e: Event) => {
         e.preventDefault();
-        const [ hora, minuto ] = time.split(':');
+        const [hora, minuto] = time.split(':');
         value.detalle = valueEditor;
         value.fecha = moment(fecha).hour(Number(hora)).minute(Number(minuto)).toDate();
         value.from = {
@@ -93,67 +93,69 @@ const Modal = () => {
 
         value.to = listConv;
 
-        if( active ){
+        if (active) {
             value.id = active.id;
-            dispatch( startUpdateAnnoucement(value) );
-        }else {
-            dispatch( startAddAnnoucement(value) );
+            dispatch(startUpdateAnnoucement(value));
+        } else {
+            dispatch(startAddAnnoucement(value));
         }
-        dispatch( clearActiveFab() );
-        dispatch( clearListConv() );
-        dispatch( closeModal() );
+        dispatch(clearActiveFab());
+        dispatch(clearListConv());
+        dispatch(closeModal());
         setValueEditor('');
-        (document as any).querySelector('#fileSelector').value='';
+        (document as any).querySelector('#fileSelector').value = '';
         reset();
     }
 
-    return createPortal( <div id="modal1" className="modal" ref={ ref }> 
+    return createPortal(<div id="modal1" className="modal" ref={ref}>
         <div className="modal-content">
             <h4>{
                 fab?.plus ? 'Crear Convocatoria' : 'Editar Convocatoria'
             }</h4>
 
-            <form onSubmit={ handleSubmit as any } className='modalForm'>
-                <br /><br />
-
-                <div className="input-field col s6">
-                    <i className="material-icons prefix">subject</i>
-                    {/* <label htmlFor="asuntoid">Asunto</label> */}
-                    <input 
-                        type="text"
-                        id="asuntoid"
-                        name='asunto'
-                        placeholder='Asunto'
-                        value={ asunto }
-                        onChange={ handleInputOnChange }
-                        minLength={0}
-                        maxLength={30} 
-                        autoComplete='off'
-                    />
+            <form onSubmit={handleSubmit as any} className='modalForm'>
+                <br />   <br />
+                <div className="row col s12">
+                    <div className="input-field col s12">
+                        <i className="material-icons prefix">subject</i>
+                        <label htmlFor="asuntoid">Asunto</label>
+                        <input
+                            type="text"
+                            id="asuntoid"
+                            name='asunto'
+                            value={asunto}
+                            onChange={handleInputOnChange}
+                            minLength={0}
+                            maxLength={30}
+                            autoComplete='off'
+                        />
+                    </div>
                 </div>
-            
-                <div className="input-field col s6 modalDate">
-                    <i className="material-icons prefix">date_range</i>
-                    <input 
-                        type="date"
-                        id="dateid"
-                        name='fecha'
-                        min={ active ? '' :moment(new Date()).format('YYYY-MM-DD') }
-                        value={ moment(fecha).format('YYYY-MM-DD') }
-                        onChange={ handleInputOnChange }
-                    />
+
+                <div className="input-field row col s12 modalDate">
+                    <div className="inputFecha col s6">
+                        <i className="material-icons prefix">date_range</i>
+                        <input
+                            type="date"
+                            id="dateid"
+                            name='fecha'
+                            min={active ? '' : moment(new Date()).format('YYYY-MM-DD')}
+                            value={moment(fecha).format('YYYY-MM-DD')}
+                            onChange={handleInputOnChange}
+                        />
+                    </div>
                     <div id='timeid'>
-                        <i 
+                        <i
                             className="material-icons prefix"
                             id='icontime'
                             onClick={() => setShowTime(!showTime)}
-                            >access_time
+                        >access_time
                         </i>
-                        <input 
+                        <input
                             type="text"
                             name='hora'
-                            value={ time }
-                            readOnly={ true }  
+                            value={time}
+                            readOnly={true}
                         />
                         {showTime &&
                             <TimeKeeper
@@ -166,10 +168,9 @@ const Modal = () => {
                     </div>
                 </div>
 
-
                 <div className="input-field col s6">
                     <i className="material-icons prefix">account_circle</i>
-                    <div className="chips chips-autocomplete" ref={ ref_chip }></div>
+                    <div className="chips chips-autocomplete" ref={ref_chip}></div>
                 </div>
 
                 <div className=' modalattachment'>
@@ -179,71 +180,71 @@ const Modal = () => {
                     </div>
                 </div>
 
-                <div className="input-field col s6 modaleditor">       
+                <div className="input-field col s6 modaleditor">
                     <Editor
                         id='detalleid'
-                        value={ valueEditor }
-                        onEditorChange={ handleEditor }
+                        value={valueEditor}
+                        onEditorChange={handleEditor}
                         outputFormat='html'
-                        init={ config }
+                        init={config}
                     />
                 </div>
 
 
                 <div className=' modalattachment'>
-                  
-                    <div  className='input-field col s6 attachment'>
-                        <i 
+
+                    <div className='input-field col s6 attachment'>
+                        <i
                             className="material-icons prefix "
-                            onClick={ handleUploadFiles }
-                            >attach_file
+                            onClick={handleUploadFiles}
+                        >attach_file
                         </i>
                         <label htmlFor="">Adjuntos</label>
 
-                        <input 
-                            type="file" 
+                        <input
+                            type="file"
                             id='fileSelector'
-                            name="adjunto" 
-                            onChange={ handleInputOnChange }
-                            multiple={ true }
-                            style={{display:'none'}}
+                            name="adjunto"
+                            onChange={handleInputOnChange}
+                            multiple={true}
+                            style={{ display: 'none' }}
                         />
                         <br /><br /><br />
                         <div>
                             {
-                                active ? active.files?.map((f,index) => <div
-                                    onClick={ () => startDownload(String(active.id), f) }
-                                    key={index}> { f }
-                                    
-                                </div> ) : adjunto && Array.from(adjunto).map((file:any) => <div 
+                                active ? active.files?.map((f, index) => <div
+                                    onClick={() => startDownload(String(active.id), f)}
+                                    key={index}> {f}
+
+                                </div>) : adjunto && Array.from(adjunto).map((file: any) => <div
                                     key={file.name}>
-                                        {file.name}
-                                </div>)  
-                                
+                                    {file.name}
+                                </div>)
+
                             }
-                            
+
                             {/*  */}
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
-                    <button 
+                    <button
                         type="submit"
                         className='btn waves-effect waves-light primary'
-                        >Agendar
-                    </button> 
+                    >Agendar
+                    </button>
 
-                    <button 
+                    <button
                         type="button"
-                        onClick={ () => dispatch(closeModal()) }
+                        onClick={() => dispatch(closeModal())}
                         className='btn waves-effect waves-light red lighten-2 primary'
-                        >Cancelar
-                    </button> 
+                    >Cancelar
+                    </button>
                 </div>
-            </form> 
+            </form>
         </div>
-        
+
     </div>, portal)
 }
 
