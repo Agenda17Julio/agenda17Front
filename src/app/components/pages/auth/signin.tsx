@@ -33,36 +33,43 @@ const SigninScreen = () => {
 
 
     return <section className='signin_section_main_contenedor'>
+
         <div className="signin_section_container">
             <div className="signin_section_container_forms-container">
-                <div className="input-field col s6">
-                    <i className="material-icons prefix">account_circle</i>
-                    <label htmlFor="usernameid">Username</label>
-                    <input
-                        type="text"
-                        id="usernameid"
-                        name='username'
-                        value={username}
-                        onChange={handleInputOnChange}
-                        minLength={0}
-                        maxLength={30}
-                        className="validate"
-                        autoComplete='off'
+                <div className="signin_section_container_forms-container_signin-signup">
+                    <form className="section_signin_form row" onSubmit={handleSubmit as any} >
+                        <h2 className="section_signin_form_title">Logearse</h2>
+                        <div className="input-field col s12">
+                            <i className="material-icons prefix">account_circle</i>
+                            <label htmlFor="usernameid">Username</label>
+                            <input
+                                type="text"
+                                id="usernameid"
+                                name='username'
+                                value={username}
+                                onChange={handleInputOnChange}
+                                minLength={0}
+                                maxLength={30}
+                                className="validate"
+                                autoComplete='off'
 
-                    />
-                </div>
-                <div className="input-field col s6">
-                    <i className="material-icons prefix">lock</i>
-                    <label htmlFor="passwordid">Password</label>
-                    <input
-                        type="password"
-                        id="passwordid"
-                        name='password'
-                        value={password}
-                        onChange={handleInputOnChange}
-                        minLength={0}
-                        autoComplete='off'
-                    />
+                            />
+                        </div>
+                        <div className="input-field col s12">
+                            <i className="material-icons prefix">lock</i>
+                            <label htmlFor="passwordid">Password</label>
+                            <input
+                                type="password"
+                                id="passwordid"
+                                name='password'
+                                value={password}
+                                onChange={handleInputOnChange}
+                                minLength={0}
+                                autoComplete='off'
+                            />
+                        </div>
+                        <input type="submit" value="Iniciar Sesion" className="section_signin_form btn solid" />
+                    </form>
                 </div>
             </div>
         </div>
