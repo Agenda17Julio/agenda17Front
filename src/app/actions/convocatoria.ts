@@ -3,7 +3,7 @@ import { i_conv_action as i_action, tipo_recurso } from '../interfaces/reducers/
 import { fetchWithToken } from '../helpers/fetch';
 import { i_resp_active_annoucements,i_event_resp } from '../interfaces/resp_serv/convocatorias';
 import Swal from 'sweetalert2';
-import { closeModal } from './ui';
+import { clearActiveFab, clearActiveFile, closeModal } from './ui';
 import { i_redux } from '../interfaces/redux';
 import { i_search } from '../interfaces/components/convocatoria';
 
@@ -34,39 +34,19 @@ export const startLoadActiveAnnoucements = () => async( callback:Function ) => {
     }
 }
 
+export const startAddAnnoucement = ( values:i_event_resp, adjunto:File[] ) => async ( callback:Function ) => {
 
-export const startUpdateAnnoucement = (convocatoria:i_event_resp) => async (callback: Function ) => {
-    
-    const resp = await fetchWithToken({url:`/convocatoria/annoucements/${convocatoria.id}`, method: 'PUT', data:convocatoria, isjson:true});
-    const { ok, msg } = await resp.json() as i_resp_active_annoucements;
-
-    if(ok){
-        callback( clearActiveAnnoucement() );
-        callback( updateActivesConv(convocatoria) );
-        return Swal.fire({
-            title: 'Proceso terminado!',
-            text: msg,
-            icon: 'success',
-            timer: 4000
-        });
-    }else {
-        return Swal.fire({
-            title: 'Oh no!',
-            text: msg,
-            icon: 'error',
-            timer: 4000
-        });
-    }
-}
-
-
-export const startAddAnnoucement = ( { adjunto,asunto,detalle,fecha,from,to,usuario }:i_event_resp ) => async ( callback:Function ) => {
+    const { asunto,detalle,fecha,from,to,usuario } = values;
 
     const formData = new FormData();
+    const filesstringnames:string[] = [];
 
     if( adjunto ){
         for (let i = 0; i < adjunto.length; i++) {
-            formData.append('adjuntos', adjunto[i]);
+            const filename = adjunto[i].name;
+            const ext = filename.substring(filename.lastIndexOf('.'), filename.length);
+            formData.append('adjuntos', adjunto[i], `${i}${new Date().getTime()}-${new Date().getMilliseconds()}${ext}`);
+            filesstringnames.push(`${i}${new Date().getTime()}-${new Date().getMilliseconds()}${ext}`);
         }
     }
 
@@ -79,7 +59,6 @@ export const startAddAnnoucement = ( { adjunto,asunto,detalle,fecha,from,to,usua
         usuario
     }));
 
-    
     const resp = await fetchWithToken({url:'/convocatoria/mail',method:'POST',data:formData});
     
     const { ok, msg, id} = await resp.json();
@@ -87,7 +66,7 @@ export const startAddAnnoucement = ( { adjunto,asunto,detalle,fecha,from,to,usua
     callback(closeModal());
 
     if( ok ){
-        callback(addAnnoucement({adjunto, asunto, detalle, fecha, usuario, to, id }));
+        callback(addAnnoucement({adjunto, asunto, detalle, fecha, usuario, to, id, files: filesstringnames }));
 
         callback(clearListConv());
         return Swal.fire({
@@ -104,6 +83,63 @@ export const startAddAnnoucement = ( { adjunto,asunto,detalle,fecha,from,to,usua
             timer: 4000,
             icon: 'warning'
         })
+    }
+}
+
+
+export const startUpdateAnnoucement = ( convocatoria:i_event_resp, adjunto:File[] ) => async (callback: Function, reduxdata: () => i_redux ) => {
+
+    const { asunto,detalle,fecha,from,to,usuario } = convocatoria;
+    const formData = new FormData();
+    const filesstringnames:string[] = [];
+
+    if( adjunto ){
+        for (let i = 0; i < adjunto.length; i++) {
+            const filename = adjunto[i].name;
+            const ext = filename.substring(filename.lastIndexOf('.'), filename.length);
+            formData.append('adjuntos', adjunto[i], `${i}${new Date().getTime()}-${new Date().getMilliseconds()}${ext}`);
+            filesstringnames.push(`${i}${new Date().getTime()}-${new Date().getMilliseconds()}${ext}`);
+        }
+    }
+
+    formData.append('data', JSON.stringify({
+        asunto,
+        detalle,
+        fecha,
+        from,
+        to,
+        usuario
+    }));
+    
+    const resp = await fetchWithToken({url:`/convocatoria/annoucements/${convocatoria.id}`, method: 'PUT', data:formData});
+    const { ok, msg } = await resp.json() as i_resp_active_annoucements;
+
+    if(ok){
+
+        const { active } = reduxdata().conv;
+
+        for (const i in active?.files) {
+            filesstringnames.push( String(active?.files[Number(i)]) );
+        }
+
+
+        callback( updateActivesConv({adjunto, asunto, detalle, fecha, usuario, to, id:convocatoria.id , files: filesstringnames }) );
+        callback( clearActiveAnnoucement() );
+        callback( closeModal() );
+
+        return Swal.fire({
+            title: 'Proceso terminado!',
+            text: msg,
+            icon: 'success',
+            timer: 4000
+        });
+    }else {
+        return Swal.fire({
+            title: 'Oh no!',
+            text: msg,
+            icon: 'error',
+            timer: 4000
+        });
     }
 }
 
@@ -128,6 +164,7 @@ export const startDelAnnoucement = (convocatoria:i_event_resp) => async (callbac
 
             if( fab?.del ) {
                 callback( deleteActivesConv(convocatoria));
+                callback( clearActiveFab() );
             }else {
                 callback( startLoadAnnoucements(Number(pagina)) );
             }
@@ -312,7 +349,7 @@ export const setTypeList = (typeList:tipo_recurso):i_action => {
 }
 
 
-export const startDownload = async (id:string, filename: string) => {
+export const startDownload = (id:string, filename: string) =>  async (callback:Function) =>{
     const resp = await fetchWithToken({url:`/convocatoria/files/${id}/${filename}`});
     const file = await resp.blob();
 
@@ -331,5 +368,48 @@ export const startDownload = async (id:string, filename: string) => {
     setTimeout(() => {
         URL.revokeObjectURL(url);
         document.body.removeChild(a);
-    }, 0)
+    }, 0);
+
+    callback(clearActiveFile());
+}
+
+
+
+
+export const startDelFileServer = (id:string, filename:string) => async ( callback:Function ) => {
+    const resp = await fetchWithToken({url:`/convocatoria/adjunto/${id}/${filename}`, method:'DELETE'});
+    const { ok, msg} = await resp.json();
+
+    if( ok ){
+        
+        return Swal.fire({
+            title: 'Todo salió bien!',
+            text: msg,
+            icon: 'success',
+            timer: 2000
+        })
+
+    }else {
+        return Swal.fire({
+            title: 'Oh no!',
+            text: msg,
+            timer: 2000
+        })
+    }
+
+}
+
+
+
+
+
+export const deleteFileServer = (filename:string):i_action  =>{
+    const { deleteFileServer:type } = types;
+
+    return {
+        type,
+        payload: {
+            filename
+        }
+    }
 }

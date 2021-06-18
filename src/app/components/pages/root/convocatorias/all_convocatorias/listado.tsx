@@ -5,10 +5,9 @@ import moment from '../../../../../helpers/momentjs';
 import Paginacion from "../../../../ui/paginación";
 import Modal from '../../../../ui/modal';
 import { openModal } from '../../../../../actions/ui';
-import { i_events_convocatoria } from "../../../../../interfaces/helper/events";
 import { i_event_resp } from "../../../../../interfaces/resp_serv/convocatorias";
 import { useEffect } from "react";
-
+import Loading from '../../../../ui/loading';
 
 const AllConvocatorias = () => {
 
@@ -72,7 +71,7 @@ const AllConvocatorias = () => {
 
                 <Modal/>
             </div>
-            : <div>Esperee...</div>
+            : <Loading/>
         }
 
         

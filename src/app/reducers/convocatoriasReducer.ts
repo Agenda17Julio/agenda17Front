@@ -9,7 +9,9 @@ const init:i_state = {
 const convocatoriaReducer = (state = init, action:i_action):i_state => {
 
     const { loadConv,loadActiveConv,activeConv,clearActiveConv,addConv,
-        listToConv,clearListToConv,deleteActiveConv,getUsers,typeListConv,updateActiveConv } = types;
+        listToConv,clearListToConv,deleteActiveConv,getUsers,typeListConv,
+        updateActiveConv,deleteFileServer } = types;
+
     const { type, payload } = action;
     
 
@@ -58,6 +60,7 @@ const convocatoriaReducer = (state = init, action:i_action):i_state => {
             }
             break;
         case updateActiveConv:
+
             if(payload?.aux && state.actives) {
                 state = {
                     ...state,
@@ -103,7 +106,16 @@ const convocatoriaReducer = (state = init, action:i_action):i_state => {
             break;
         
         case getUsers: state = { ...state, users: payload?.users }; break;
-
+        case deleteFileServer: {
+            if( payload?.filename )
+                state = {
+                    ...state,
+                    active: {
+                        ...state.active,
+                        files: state.active?.files?.filter(f => f !== payload?.filename) 
+                    }
+                }
+        }
     }
 
     return state;

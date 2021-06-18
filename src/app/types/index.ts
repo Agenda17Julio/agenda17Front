@@ -14,7 +14,6 @@ const types:i_types =  {
     typeListConv: '[CONV] set type of annoucement',
     deleteActiveConv: '[CONV] delete annoucement active',
     getUsers: '[CONV] get users',
-    showFile: '[UI] show file',
     updateActiveConv: '[CONV] update annoucement',
     activePlusFab: '[FAB] active plus fab',
     activeEditFab: '[FAB] active edit fab',
@@ -27,7 +26,15 @@ const types:i_types =  {
     clearListToConv: '[CONV] clear list users',
     setPag: '[UI] set Paginación',
     clearPag: '[UI] clear Paginación',
-    resetPag: '[UI] reset pag'
+    resetPag: '[UI] reset pag',
+    setFiles: '[UI] set files',
+    deleteFileServer: '[CONV] delete file from server',
+    deleteFileLocal: '[UI] delete file local',
+    setActiveFile: '[UI] set active file',
+    clearActiveFile: '[UI] clear active file',
+    delActiveFile: '[UI] delete activeFile',
+    clearDelActiveFile: '[UI] clear delete activeFile',
+    clearAllFiles: '[UI] clear all files locals'
 }
 
 

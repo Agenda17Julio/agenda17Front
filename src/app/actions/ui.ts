@@ -1,5 +1,5 @@
 import types from '../types';
-import { i_ui_action as i_action,i_showfile } from '../interfaces/reducers/ui';
+import { i_ui_action as i_action } from '../interfaces/reducers/ui';
 
 export const startLoading = ():i_action => {
     const { startLoading:type } = types;
@@ -34,6 +34,7 @@ export const activePlusFab = ():i_action => {
     const { activePlusFab:type } = types;
     return { type }
 }
+
 
 
 export const activeEditDeleteFab = ():i_action => {
@@ -84,3 +85,73 @@ export const clearPagina = ():i_action => {
         type
     }
 }
+
+
+export const setFileAll = (files:Array<File>) => {
+    const { setFiles:type } = types;
+
+    return {
+        type,
+        payload: {
+            files
+        }
+    }
+}
+
+export const clearAllFiles = ():i_action => {
+    const { clearAllFiles:type } = types;
+    return { type }
+}
+
+
+export const delFile = (filename:string) => {
+    const { deleteFileLocal:type } = types;
+
+    return {
+        type,
+        payload: {
+            filename
+        }
+    }
+}
+
+export const setActiveFile = (filename:string):i_action => {
+    const { setActiveFile:type } = types;
+
+    return {
+        type,
+        payload: {
+            activefile: filename
+        }
+    }
+}
+
+export const clearActiveFile = ():i_action => {
+    const { clearActiveFile:type } = types;
+
+    return {
+        type
+    }
+}
+
+
+export const delActiveFile = ():i_action => {
+    const { delActiveFile:type } = types;
+    return { type }
+}
+
+export const clearDelActiveFile = ():i_action => {
+    const { clearDelActiveFile:type } = types;
+    return { type }
+}
+
+// export const setAdjuntoData = (adjuntoData):i_action => {
+//     const { adjuntoData:type } = types;
+
+//     return { 
+//         type,
+//         payload: {
+//             adjuntoData
+//         }
+//     }
+// }

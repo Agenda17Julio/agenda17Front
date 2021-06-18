@@ -27,7 +27,7 @@ const CardActiveAnnoucements = (event:i_event_resp) => {
                   <span className="card-title">{ asunto }</span>
                   <span className="card-fecha">{ date }</span>
               </div>
-              <p className='card-text' dangerouslySetInnerHTML={{__html: detalle}}></p>
+              <p className='card-text' dangerouslySetInnerHTML={{__html: String(detalle)}}></p>
               <div className="card-container-img">
                   <img 
                       src="https://images.photowall.com/products/60869/azores-mountain-landscape-1.jpg?h=699&q=85" 

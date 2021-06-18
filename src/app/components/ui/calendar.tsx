@@ -47,7 +47,7 @@ const Calendar = ( {listEvents}:{ listEvents:any }) => {
 
         dispatch(activeEditDeleteFab());
        
-        const active:i_events_convocatoria = {
+        const active:any = {
             ...extendedProps,
             id,
             title,
