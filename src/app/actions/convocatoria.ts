@@ -3,7 +3,7 @@ import { i_conv_action as i_action, tipo_recurso } from '../interfaces/reducers/
 import { fetchWithToken } from '../helpers/fetch';
 import { i_resp_active_annoucements,i_event_resp } from '../interfaces/resp_serv/convocatorias';
 import Swal from 'sweetalert2';
-import { clearActiveFab, clearActiveFile, closeModal } from './ui';
+import { clearActiveFab, clearActiveFile, closeModal, stopLoading } from './ui';
 import { i_redux } from '../interfaces/redux';
 import { i_search } from '../interfaces/components/convocatoria';
 
@@ -16,6 +16,7 @@ export const startLoadAnnoucements = ( pagina:number ) => async ( callback:Funct
             data[i].to = JSON.parse(data[i].to as any);
         }
         callback( loadAnnouncement(data, registros[0].registros ) );
+        callback( stopLoading() );
     }
 
 }
@@ -31,6 +32,7 @@ export const startLoadActiveAnnoucements = () => async( callback:Function ) => {
             data[i].to = JSON.parse(data[i].to as any);
         }
         callback( loadActiveAnnouncement(data) );
+        callback( stopLoading() );
     }
 }
 
@@ -64,6 +66,7 @@ export const startAddAnnoucement = ( values:i_event_resp, adjunto:File[] ) => as
     const { ok, msg, id} = await resp.json();
 
     callback(closeModal());
+    callback(stopLoading());
 
     if( ok ){
         callback(addAnnoucement({adjunto, asunto, detalle, fecha, usuario, to, id, files: filesstringnames }));
@@ -126,6 +129,7 @@ export const startUpdateAnnoucement = ( convocatoria:i_event_resp, adjunto:File[
         callback( updateActivesConv({adjunto, asunto, detalle, fecha, usuario, to, id:convocatoria.id , files: filesstringnames }) );
         callback( clearActiveAnnoucement() );
         callback( closeModal() );
+        callback( stopLoading() );
 
         return Swal.fire({
             title: 'Proceso terminado!',
@@ -134,6 +138,7 @@ export const startUpdateAnnoucement = ( convocatoria:i_event_resp, adjunto:File[
             timer: 4000
         });
     }else {
+        callback( stopLoading() );
         return Swal.fire({
             title: 'Oh no!',
             text: msg,
@@ -165,6 +170,7 @@ export const startDelAnnoucement = (convocatoria:i_event_resp) => async (callbac
             if( fab?.del ) {
                 callback( deleteActivesConv(convocatoria));
                 callback( clearActiveFab() );
+                callback( stopLoading() );
             }else {
                 callback( startLoadAnnoucements(Number(pagina)) );
             }
@@ -205,11 +211,14 @@ export const startSearchConvocatoria = ( values:i_search ) => async ( callback:F
       
         if( ok ){
             if( registros[0].registros <= 0 ){
-                return texto_Swal('No se encontraron datos')
+                callback( stopLoading() );
+                return texto_Swal('No se encontraron datos');
             }else {
                 callback( loadAnnouncement(data, registros[0].registros) );
+                callback( stopLoading() );
             }
         }else {
+            callback( stopLoading() );
             return texto_Swal(msg)
         }
     }
@@ -323,6 +332,7 @@ export const startGetUsers = () => async( callback:Function ) => {
     if( ok ) {
         const users = data.map((val:any) => val.correo);
         callback( getUsers(users) );
+        callback( stopLoading() );
     }
 }
 
@@ -371,6 +381,7 @@ export const startDownload = (id:string, filename: string) =>  async (callback:F
     }, 0);
 
     callback(clearActiveFile());
+    callback(stopLoading());
 }
 
 
@@ -381,6 +392,8 @@ export const startDelFileServer = (id:string, filename:string) => async ( callba
     const { ok, msg} = await resp.json();
 
     if( ok ){
+
+        callback(stopLoading());
         
         return Swal.fire({
             title: 'Todo salió bien!',

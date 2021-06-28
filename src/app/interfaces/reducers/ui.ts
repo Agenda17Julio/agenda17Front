@@ -20,5 +20,6 @@ export interface i_fab_state {
     edit?: boolean,
     del?: boolean,
     delAdjunto?:boolean,
-    downloadAdjunto?:boolean
+    downloadAdjunto?:boolean;
+    view?: boolean;
 }

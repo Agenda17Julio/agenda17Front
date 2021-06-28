@@ -15,6 +15,7 @@ export const startLogin = (data:i_signin<string>) => async ( callback:Function )
     if( ok ){
         localStorage.setItem('x-token',token);
         const { payload } = decode(token) as i_token;
+
         callback(login(payload));
         callback( stopLoading() );
         

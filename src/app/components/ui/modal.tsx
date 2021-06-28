@@ -2,7 +2,7 @@ import { createPortal } from 'react-dom'
 import { useEffect, useRef,useState } from "react";
 import { ChipsOptions, ModalOptions } from "materialize-css";
 import { startAddAnnoucement,clearListConv, startUpdateAnnoucement,startDownload, setListConv, deleteFileServer, startDelFileServer } from "../../actions/convocatoria";
-import { clearActiveFab, clearActiveFile, clearAllFiles, clearCalendarDate, clearDelActiveFile, closeModal, delActiveFile, delFile, setActiveFile, setFileAll } from "../../actions/ui";
+import { clearActiveFab, clearActiveFile, clearAllFiles, clearCalendarDate, clearDelActiveFile, closeModal, delActiveFile, delFile, setActiveFile, setFileAll, startLoading } from "../../actions/ui";
 import { i_redux } from "../../interfaces/redux";
 import { useDispatch, useSelector } from 'react-redux';
 import { i_event_resp } from '../../interfaces/helper/events';
@@ -22,7 +22,7 @@ const Modal = () => {
     const ref_chip = useRef<any>(null);
     const refadjunto_chip = useRef<any>(null);
     const dispatch = useDispatch();
-    const { ui:{ fab,files,activefile,modal,delactivefile }, conv: { active,users } } = useSelector((info:i_redux) => info);
+    const { ui:{ fab,files,activefile,modal,delactivefile }, conv: { active,users }, auth:{rol} } = useSelector((info:i_redux) => info);
 
 
     const { 
@@ -42,10 +42,10 @@ const Modal = () => {
 
     
     const [ value,handleInputOnChange,setValues,reset ] = UseForm( init );
-    let { asunto,fecha,adjunto } = value as i_event_resp;
+    let { asunto,fecha } = value as i_event_resp;
 
     const [ valueEditor, setValueEditor ] = useState('');
-    const [ time, setTime ] = useState(moment(new Date).minutes(30).format('HH:mm'));
+    const [ time, setTime ] = useState(moment(new Date()).minutes(30).format('HH:mm'));
     const [ showTime, setShowTime ] = useState(false);
     const input = (document as any).querySelector('#fileSelector') as HTMLInputElement;
 
@@ -84,7 +84,7 @@ const Modal = () => {
     const opcionesChips:ChipsOptions = {
         data:                   [],
         placeholder:	        'Destinatarios',
-        secondaryPlaceholder:	'',
+        secondaryPlaceholder:	'Add+',
         autocompleteOptions:	{
             data: {},
             limit: Infinity,
@@ -92,6 +92,7 @@ const Modal = () => {
         },
         limit:	                Infinity,
         onChipAdd: () => { 
+
             instanceChips.chipsData.forEach(({tag}:{tag:string}, index:number) => {
                 if(!validateEmail(tag)){
                     instanceChips.deleteChip( index );
@@ -100,8 +101,7 @@ const Modal = () => {
             dispatch(setListConv(mapData(instanceChips.chipsData)))
         },
         onChipSelect: () => {},
-        onChipDelete: () => dispatch(setListConv(mapData(instanceChips.chipsData)))
-          
+        onChipDelete: () => dispatch(setListConv(mapData(instanceChips.chipsData)))   
     }
 
     const deleteWarning = (msg:string, callback:Function, fileserver:boolean) => Swal.fire({
@@ -153,7 +153,7 @@ const Modal = () => {
     useEffect(() => {
         init = {
             ...init,
-            fecha: calendarDate || new Date
+            fecha: calendarDate || new Date()
         }
 
         if( active ) {
@@ -209,6 +209,7 @@ const Modal = () => {
                 if( active?.files[Number(j)] === activefile) {
                     isfileserver = true;
                     dispatch( deleteFileServer(String(activefile)) );
+                    dispatch( startLoading() );
                     dispatch( startDelFileServer(String(active?.id), String(activefile)) );
                 }
             }
@@ -316,8 +317,10 @@ const Modal = () => {
 
         if( active ){
             value.id = active.id;
+            dispatch(startLoading());
             dispatch( startUpdateAnnoucement(value,files as File[]) );
         }else {
+            dispatch(startLoading());
             dispatch( startAddAnnoucement(value,files as File[]) );
         }
         dispatch( clearActiveFab() );
@@ -346,7 +349,7 @@ const Modal = () => {
     return createPortal( <div id="modal1" className="modal" ref={ ref }> 
         <div className="modal-content">
             <h4>{
-                fab?.plus ? 'Crear Convocatoria' : 'Editar Convocatoria'
+                fab?.plus ? 'Crear Convocatoria' : 'Visualizar Convocatoria'
             }</h4>
 
             <form onSubmit={ handleSubmit as any } className='modalForm'>
@@ -364,6 +367,7 @@ const Modal = () => {
                         minLength={0}
                         maxLength={30} 
                         autoComplete='off'
+                        disabled={Number(rol) !== 1}
                     />
                 </div><br />
             
@@ -376,12 +380,14 @@ const Modal = () => {
                         min={ active ? '' :moment(new Date()).format('YYYY-MM-DD') }
                         value={ moment(fecha).format('YYYY-MM-DD') }
                         onChange={ handleInputOnChange }
+                        disabled={Number(rol) !== 1}
                     />
                     <div id='timeid'>
                         <i 
                             className="material-icons prefix"
                             id='icontime'
-                            onClick={() => setShowTime(!showTime)}
+                            onClick={() => Number(rol) === 1 && setShowTime(!showTime)}
+                            
                             >access_time
                         </i>
                         <input 
@@ -389,6 +395,7 @@ const Modal = () => {
                             name='hora'
                             value={ time }
                             readOnly={ true }  
+                            disabled={Number(rol) !== 1}
                         />
                         {showTime &&
                             <TimeKeeper
@@ -416,6 +423,7 @@ const Modal = () => {
                         onChange={ handleOnChangeInputFiles }
                         multiple={ true }
                         style={{display:'none'}}
+                        disabled={Number(rol) !== 1}
                     />
                 </div>
 
@@ -433,15 +441,19 @@ const Modal = () => {
                         onEditorChange={ handleEditor }
                         outputFormat='html'
                         init={ config }
+                        disabled={Number(rol) !== 1}
                     />
-                </div>                
+                </div>    
+          
                 <div className='container_btn_modal'>
-                    <button 
-                        type="submit"
-                        className='btn waves-effect waves-light primary'
-                        >Agendar
-                    </button> 
-
+                    {
+                        Number(rol) === 1 &&  <button 
+                            type="submit"
+                            className='btn waves-effect waves-light primary'
+                            >Agendar
+                        </button> 
+                    }
+                   
                     <button 
                         type="button"
                         onClick={ () => dispatch(closeModal()) }
@@ -449,24 +461,20 @@ const Modal = () => {
                         >Cancelar
                     </button>
 
-                    <button 
-                        type="button"
-                        onClick={ () => console.log(active?.files) }
-                        className='btn waves-effect waves-light red lighten-2 primary'
-                        >files
-                    </button> 
-
 
                 </div>
             </form> 
             <div className="container_fab">
                 <div className="container_fab_modal">
                     <Fab color='cyan' toggle={ handleActivefile() } icon='file_download' click={ () => {
+                        dispatch(startLoading());
                         dispatch(startDownload(String(active?.id), String(activefile))) }
                     }/>
-                    <Fab color='red' toggle={ activefile ? false : true } icon='delete' click={ () => {
-                        dispatch(delActiveFile());
-                    }}/>
+                    {
+                        Number(rol) === 1 && <Fab color='red' toggle={ activefile ? false : true } icon='delete' click={ () => {
+                            dispatch(delActiveFile());
+                        }}/>
+                    }
                 </div>
             </div>
         </div>

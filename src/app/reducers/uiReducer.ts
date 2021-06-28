@@ -7,7 +7,8 @@ const init:i_state = {
     fab: {
         plus: false,
         edit: false,
-        del: false
+        del: false,
+        view: false
     },
     calendarDate: new Date(),
     pagina: 1,
@@ -20,7 +21,7 @@ const uiReducer = ( state = init, action: i_action ):i_state => {
     const { startLoading, stopLoading, openModal, closeModal, setCalendarDate,
         activePlusFab, activeEditFab, clearActiveFab, clearCalendarDate, setPag, 
         clearPag, setFiles,deleteFileLocal,setActiveFile,clearDelActiveFile,
-        clearActiveFile,delActiveFile,clearAllFiles } = types;
+        clearActiveFile,delActiveFile,clearAllFiles,activeView } = types;
     
     const { type,payload } = action;
 
@@ -55,9 +56,23 @@ const uiReducer = ( state = init, action: i_action ):i_state => {
                 fab: {
                     plus: true,
                     edit: false,
-                    del: false
+                    del: false,
+                    view: false
                 }
             }
+
+            break;
+        case activeView: 
+            state = {
+                ...state,
+                fab: {
+                    plus: false,
+                    edit: false,
+                    del : false,
+                    view: true
+                }
+            }
+
             break;
         case activeEditFab:
             state = {
@@ -65,7 +80,8 @@ const uiReducer = ( state = init, action: i_action ):i_state => {
                 fab: {
                     plus: false,
                     edit: true,
-                    del: true
+                    del: true,
+                    view: false
                 }
             }
             break;

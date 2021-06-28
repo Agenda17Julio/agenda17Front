@@ -65,7 +65,7 @@ const convocatoriaReducer = (state = init, action:i_action):i_state => {
                 state = {
                     ...state,
                     actives: state.actives?.map(conv => {
-                        if(conv.id == payload.aux?.id ){
+                        if(conv.id === payload.aux?.id ){
                             return payload.aux as any
                         } else {
                             return conv;
@@ -77,7 +77,7 @@ const convocatoriaReducer = (state = init, action:i_action):i_state => {
                     ...state,
                     convocatorias: {
                         data: state.convocatorias.data.map(conv => {
-                            if(conv.id == payload.aux?.id ){
+                            if(conv.id === payload.aux?.id ){
                                 return payload.aux as any
                             } else {
                                 return conv;

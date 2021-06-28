@@ -6,7 +6,8 @@ const init:i_state = {
     uid: '',
     username: '',
     email: '',
-    checking: true
+    checking: true,
+    rol: ''
 }
 
 const AuthReducer = (state = init, action:i_action):i_state => {

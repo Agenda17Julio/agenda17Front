@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { clearActiveAnnoucement } from "../../../../../actions/convocatoria";
 import { setPagina } from "../../../../../actions/ui";
@@ -16,7 +16,7 @@ const Convocatorias  = () => {
     return <div>
         <Link to='/' onClick={ handleBackCal }>Regresar a Calendario</Link>
         <Search/>
-        <Listado/>
+        <Listado/> 
     </div>
 }
 

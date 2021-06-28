@@ -1,7 +1,6 @@
 import { i_event_resp } from "../../../../interfaces/resp_serv/convocatorias";
 import moment from '../../../../helpers/momentjs';
-import { useDispatch, useSelector } from "react-redux";
-import { i_redux } from "../../../../interfaces/redux";
+import { useDispatch } from "react-redux";
 import { loadActiveAnnoucement } from "../../../../actions/convocatoria";
 import { activeEditDeleteFab } from '../../../../actions/ui';
 
@@ -9,7 +8,6 @@ const CardActiveAnnoucements = (event:i_event_resp) => {
 
     const { asunto,detalle,fecha } = event;
     const dispatch = useDispatch();
-    const { active } = useSelector((info:i_redux) => info.conv);
     const date = moment(fecha).fromNow();
 
     const handleClick= () => {

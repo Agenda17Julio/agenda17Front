@@ -145,6 +145,15 @@ export const clearDelActiveFile = ():i_action => {
     return { type }
 }
 
+
+
+export const setActiveView = ():i_action => {
+    const { activeView:type } = types;
+    return {
+        type
+    }
+}
+
 // export const setAdjuntoData = (adjuntoData):i_action => {
 //     const { adjuntoData:type } = types;
 
