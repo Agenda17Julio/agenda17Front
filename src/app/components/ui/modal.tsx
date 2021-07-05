@@ -112,137 +112,144 @@ const Modal = () => {
             <h4>{
                 fab?.plus ? 'Crear Convocatoria' : 'Editar Convocatoria'
             }</h4>
-
-            <form onSubmit={handleSubmit as any} className='modalForm'>
-                <br />   <br />
-                <div className="row col s12">
-                    <div className="input-field col s12">
-                        <i className="material-icons prefix">subject</i>
-                        <label htmlFor="asuntoid">Asunto</label>
-                        <input
-                            type="text"
-                            id="asuntoid"
-                            name='asunto'
-                            value={asunto}
-                            onChange={handleInputOnChange}
-                            minLength={0}
-                            maxLength={30}
-                            autoComplete='off'
-                        />
-                    </div>
-                </div>
-
-                <div className="input-field row col s12 modalDate">
-                    <div className="inputFecha col s6">
-                        <i className="material-icons prefix">date_range</i>
-                        <input
-                            type="date"
-                            id="dateid"
-                            name='fecha'
-                            min={active ? '' : moment(new Date()).format('YYYY-MM-DD')}
-                            value={moment(fecha).format('YYYY-MM-DD')}
-                            onChange={handleInputOnChange}
-                        />
-                    </div>
-                    <div id='timeid'>
-                        <i
-                            className="material-icons prefix"
-                            id='icontime'
-                            onClick={() => setShowTime(!showTime)}
-                        >access_time
-                        </i>
-                        <input
-                            type="text"
-                            name='hora'
-                            value={time}
-                            readOnly={true}
-                        />
-                        {showTime &&
-                            <TimeKeeper
-                                time={time}
-                                onChange={(newTime) => setTime(newTime.formatted24)}
-                                onDoneClick={() => setShowTime(false)}
-                                switchToMinuteOnHourSelect
+            <div className="row">
+                <form onSubmit={handleSubmit as any} className='col s12'>
+                    <br />   <br />
+                    <div className="row col s12">
+                        <div className="input-field col s12">
+                            <i className="material-icons prefix">subject</i>
+                            <label htmlFor="asuntoid">Asunto</label>
+                            <input
+                                type="text"
+                                id="asuntoid"
+                                name='asunto'
+                                value={asunto}
+                                onChange={handleInputOnChange}
+                                minLength={0}
+                                maxLength={30}
+                                autoComplete='off'
                             />
-                        }
-                    </div>
-                </div>
-
-                <div className="input-field col s6">
-                    <i className="material-icons prefix">account_circle</i>
-                    <div className="chips chips-autocomplete" ref={ref_chip}></div>
-                </div>
-
-                <div className=' modalattachment'>
-                    <div className='input-field col s6'>
-                        <i className="material-icons prefix">edit</i>
-                        <label htmlFor="">Detalle</label>
-                    </div>
-                </div>
-
-                <div className="input-field col s6 modaleditor">
-                    <Editor
-                        id='detalleid'
-                        value={valueEditor}
-                        onEditorChange={handleEditor}
-                        outputFormat='html'
-                        init={config}
-                    />
-                </div>
-
-
-                <div className=' modalattachment'>
-
-                    <div className='input-field col s6 attachment'>
-                        <i
-                            className="material-icons prefix "
-                            onClick={handleUploadFiles}
-                        >attach_file
-                        </i>
-                        <label htmlFor="">Adjuntos</label>
-
-                        <input
-                            type="file"
-                            id='fileSelector'
-                            name="adjunto"
-                            onChange={handleInputOnChange}
-                            multiple={true}
-                            style={{ display: 'none' }}
-                        />
-                        <br /><br /><br />
-                        <div>
-                            {
-                                active ? active.files?.map((f, index) => <div
-                                    onClick={() => startDownload(String(active.id), f)}
-                                    key={index}> {f}
-
-                                </div>) : adjunto && Array.from(adjunto).map((file: any) => <div
-                                    key={file.name}>
-                                    {file.name}
-                                </div>)
-
-                            }
-
-                            {/*  */}
                         </div>
                     </div>
-                </div>
 
-                <div>
-                    <button
-                        type="submit"
-                        className='btn waves-effect waves-light primary'
-                    >Agendar
-                    </button>
+                    <div className="input-field row col s12 modalDate">
+                        <div className="inputFecha col s6">
+                            <i className="material-icons prefix">date_range</i>
+                            <input
+                                type="date"
+                                id="dateid"
+                                name='fecha'
+                                min={active ? '' : moment(new Date()).format('YYYY-MM-DD')}
+                                value={moment(fecha).format('YYYY-MM-DD')}
+                                onChange={handleInputOnChange}
+                            />
+                        </div>
+                        <div id='timeid' className="col s6">
+                            <i
+                                className="material-icons prefix"
+                                id='icontime'
+                                onClick={() => setShowTime(!showTime)}
+                            >access_time
+                            </i>
+                            <input
+                                type="text"
+                                name='hora'
+                                value={time}
+                                readOnly={true}
+                            />
+                            {showTime &&
+                                <TimeKeeper
+                                    time={time}
+                                    onChange={(newTime) => setTime(newTime.formatted24)}
+                                    onDoneClick={() => setShowTime(false)}
+                                    switchToMinuteOnHourSelect
+                                />
+                            }
+                        </div>
+                    </div>
 
-                    <button
-                        type="button"
-                        onClick={() => dispatch(closeModal())}
-                        className='btn waves-effect waves-light red lighten-2 primary'
-                    >Cancelar
-                    </button>
-                </div>
-            </form>
+                    <div className="input-field row col s12">
+                        <div className="row col s12">
+                            <i className="material-icons prefix">account_circle</i>
+                            <div className="chips chips-autocomplete" ref={ref_chip}></div>
+                        </div>
+                    </div>
+
+
+                    <div className='input-field row col s12 modalattachment'>
+                        <div className='input-field col s12'>
+                            <i className="material-icons prefix">edit</i>
+                            <label htmlFor="">Detalle</label>
+                        </div>
+                    </div>
+
+                    <div className="input-field col s12 modaleditor">
+                        <Editor
+                            id='detalleid'
+                            value={valueEditor}
+                            onEditorChange={handleEditor}
+                            outputFormat='html'
+                            init={config}
+                        />
+                    </div>
+
+
+                    <div className='col s12 row modalattachment'>
+
+                        <div className='input-field col s12 attachment'>
+                            <i
+                                className="material-icons prefix "
+                                onClick={handleUploadFiles}
+                            >attach_file
+                            </i>
+                            <label htmlFor="">Adjuntos</label>
+
+                            <input
+                                type="file"
+                                id='fileSelector'
+                                name="adjunto"
+                                onChange={handleInputOnChange}
+                                multiple={true}
+                                style={{ display: 'none' }}
+                            />
+                            <br /><br /><br />
+                            <div>
+                                {
+                                    active ? active.files?.map((f, index) => <div
+                                        onClick={() => startDownload(String(active.id), f)}
+                                        key={index}> {f}
+
+                                    </div>) : adjunto && Array.from(adjunto).map((file: any) => <div
+                                        key={file.name}>
+                                        {file.name}
+                                    </div>)
+
+                                }
+
+                                {/*  */}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="col s12 row">
+
+                        <button
+                            type="submit"
+                            className='btn  waves-effect waves-light primary col s6'
+                        >Agendar
+                        </button>
+
+
+                        <button
+                            type="button"
+                            onClick={() => dispatch(closeModal())}
+                            className='btn waves-effect waves-light red lighten-2 primary col s6'
+                        >Cancelar
+                        </button>
+
+                    </div>
+                </form>
+            </div>
         </div>
 
     </div>, portal)
