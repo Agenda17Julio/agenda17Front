@@ -11,7 +11,7 @@ const ConvocatoriaScreen = () => {
 
     
     const dispatch = useDispatch();
-    let { conv:{actives, active},ui:{fab} } = useSelector((info:i_redux) => info);
+    let { conv:{actives, active},ui:{fab}, auth:{rol} } = useSelector((info:i_redux) => info);
     const conv_activa = active as i_event;
 
     let eventsActives:i_events_convocatoria[] = actives 

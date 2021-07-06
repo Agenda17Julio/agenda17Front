@@ -27,7 +27,7 @@ const Calendar = ( {listEvents}:{ listEvents:EventSourceInput }) => {
 
         if( active ) dispatch(clearActiveAnnoucement());
             
-        if ( moment(dateStr).format('yyyy-MM-DD') < currentDate.format('yyyy-MM-DD') ) {
+        if ( moment(dateStr).format('yyyy-MM-DD') < currentDate.format('yyyy-MM-DD')) {
             if( fab?.plus || fab?.edit || fab?.del || fab?.view ){
                 dispatch(clearCalendarDate());
                 return dispatch(clearActiveFab());
@@ -36,7 +36,7 @@ const Calendar = ( {listEvents}:{ listEvents:EventSourceInput }) => {
             }
         }else{
             dispatch(setCalendarDate(date));
-            if(!fab?.plus) dispatch(activePlusFab());
+            if(!fab?.plus && Number(rol) === 1 ) dispatch(activePlusFab());
         }
        
     }

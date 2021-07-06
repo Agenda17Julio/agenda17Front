@@ -154,13 +154,8 @@ export const setActiveView = ():i_action => {
     }
 }
 
-// export const setAdjuntoData = (adjuntoData):i_action => {
-//     const { adjuntoData:type } = types;
 
-//     return { 
-//         type,
-//         payload: {
-//             adjuntoData
-//         }
-//     }
-// }
+export const clearAllUI = ():i_action => {
+    const { clearAllUI:type } = types;
+    return { type }
+}

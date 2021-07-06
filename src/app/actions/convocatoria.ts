@@ -406,10 +406,6 @@ export const startDelFileServer = (id:string, filename:string) => async ( callba
 
 }
 
-
-
-
-
 export const deleteFileServer = (filename:string):i_action  =>{
     const { deleteFileServer:type } = types;
 
@@ -419,4 +415,9 @@ export const deleteFileServer = (filename:string):i_action  =>{
             filename
         }
     }
+}
+
+export const clearAllConv =() => {
+    const { clearAllLogoutConv:type } = types;
+    return { type };
 }

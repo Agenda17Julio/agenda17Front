@@ -21,7 +21,7 @@ const uiReducer = ( state = init, action: i_action ):i_state => {
     const { startLoading, stopLoading, openModal, closeModal, setCalendarDate,
         activePlusFab, activeEditFab, clearActiveFab, clearCalendarDate, setPag, 
         clearPag, setFiles,deleteFileLocal,setActiveFile,clearDelActiveFile,
-        clearActiveFile,delActiveFile,clearAllFiles,activeView } = types;
+        clearActiveFile,delActiveFile,clearAllFiles,activeView,clearAllUI } = types;
     
     const { type,payload } = action;
 
@@ -161,6 +161,7 @@ const uiReducer = ( state = init, action: i_action ):i_state => {
                 files: init.files
             }
             break;
+        case clearAllUI: state = init; break;
     }
 
 

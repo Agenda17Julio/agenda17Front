@@ -10,7 +10,7 @@ const convocatoriaReducer = (state = init, action:i_action):i_state => {
 
     const { loadConv,loadActiveConv,activeConv,clearActiveConv,addConv,
         listToConv,clearListToConv,deleteActiveConv,getUsers,typeListConv,
-        updateActiveConv,deleteFileServer } = types;
+        updateActiveConv,deleteFileServer,clearAllLogoutConv } = types;
 
     const { type, payload } = action;
     
@@ -116,6 +116,8 @@ const convocatoriaReducer = (state = init, action:i_action):i_state => {
                     }
                 }
         }
+        break;
+        case clearAllLogoutConv: state = init;
     }
 
     return state;

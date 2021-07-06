@@ -35,7 +35,9 @@ const types:i_types =  {
     delActiveFile: '[UI] delete activeFile',
     clearDelActiveFile: '[UI] clear delete activeFile',
     clearAllFiles: '[UI] clear all files locals',
-    activeView: '[UI] active view'
+    activeView: '[UI] active view',
+    clearAllLogoutConv: '[CONV] clear whole info',
+    clearAllUI: '[UI] clear whole ui'
 }
 
 
