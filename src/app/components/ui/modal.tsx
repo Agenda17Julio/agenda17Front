@@ -317,10 +317,10 @@ const Modal = () => {
 
         if( active ){
             value.id = active.id;
-            dispatch(startLoading());
+            dispatch( startLoading() );
             dispatch( startUpdateAnnoucement(value,files as File[]) );
         }else {
-            dispatch(startLoading());
+            dispatch( startLoading() );
             dispatch( startAddAnnoucement(value,files as File[]) );
         }
         dispatch( clearActiveFab() );

@@ -28,6 +28,8 @@ export const startLoadActiveAnnoucements = () => async( callback:Function ) => {
 
     
     if( ok ){
+
+        console.log(data)
         for (const i in data) {
             data[i].to = JSON.parse(data[i].to as any);
         }
@@ -195,13 +197,6 @@ export const startSearchConvocatoria = ( values:i_search ) => async ( callback:F
         icon: 'warning'
     });
 
-    if( !values.asunto_check && !values.autor_check && !values.fecha_check ) {
-        return texto_Swal(`selecciona un criterio de busqueda`);
-    }else if ( values.asunto_check && !values.asunto ){
-        return texto_Swal('Ingresa un criterio para buscar por asunto')
-    }else if (values.autor_check && !values.autor){
-        return texto_Swal('Ingresa un criterio para buscar por autor')
-    }else {
         const { ui: { pagina } } = selector();
         
         
@@ -221,7 +216,6 @@ export const startSearchConvocatoria = ( values:i_search ) => async ( callback:F
             callback( stopLoading() );
             return texto_Swal(msg)
         }
-    }
 
 }
 

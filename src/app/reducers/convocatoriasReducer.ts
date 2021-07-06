@@ -60,12 +60,12 @@ const convocatoriaReducer = (state = init, action:i_action):i_state => {
             }
             break;
         case updateActiveConv:
-
             if(payload?.aux && state.actives) {
                 state = {
                     ...state,
                     actives: state.actives?.map(conv => {
-                        if(conv.id === payload.aux?.id ){
+
+                        if(conv.id?.toString() === payload.aux?.id ){
                             return payload.aux as any
                         } else {
                             return conv;

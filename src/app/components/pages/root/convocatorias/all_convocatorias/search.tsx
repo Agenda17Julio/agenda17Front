@@ -40,7 +40,7 @@ const Search = () =>{
             dispatch( startLoading() );
             dispatch( startSearchConvocatoria(valuesSearch));
         }
-    },[pagina, dispatch, typeList, valuesSearch])
+    },[pagina, dispatch, typeList])
 
     const handleShowAll = () => { 
         if( typeList === 'search' ){
