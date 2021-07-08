@@ -10,6 +10,7 @@ export interface i_conv_state {
     users?: Array<string>;
     valuesSearch?: i_search;
     typeList?: tipo_recurso;
+    filename?: string;
 }
 
 

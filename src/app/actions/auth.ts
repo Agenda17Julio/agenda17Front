@@ -6,7 +6,8 @@ import { i_resp_serv } from '../interfaces/resp_serv/auth';
 import { fetchWithoutToken,fetchWithToken } from '../helpers/fetch';
 import { decode } from 'jsonwebtoken';
 import Swal,{ SweetAlertOptions } from 'sweetalert2';
-import { stopLoading } from './ui';
+import { stopLoading,clearAllUI } from './ui';
+import { clearAllConv } from './convocatoria';
 
 export const startLogin = (data:i_signin<string>) => async ( callback:Function ) => {
     const resp = await fetchWithoutToken({url:'/auth/login',method:'POST', data});
@@ -15,6 +16,7 @@ export const startLogin = (data:i_signin<string>) => async ( callback:Function )
     if( ok ){
         localStorage.setItem('x-token',token);
         const { payload } = decode(token) as i_token;
+
         callback(login(payload));
         callback( stopLoading() );
         
@@ -52,6 +54,8 @@ export const startLogin = (data:i_signin<string>) => async ( callback:Function )
 export const startLogout = () => ( callback:Function ) => {
     localStorage.clear();
     callback( logout() );
+    callback( clearAllConv() );
+    callback( clearAllUI() );
 }
 
 

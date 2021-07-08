@@ -11,7 +11,7 @@ const ConvocatoriaScreen = () => {
 
     
     const dispatch = useDispatch();
-    let { conv:{actives, active},ui:{fab} } = useSelector((info:i_redux) => info);
+    let { conv:{actives, active},ui:{fab}, auth:{rol} } = useSelector((info:i_redux) => info);
     const conv_activa = active as i_event;
 
     let eventsActives:i_events_convocatoria[] = actives 
@@ -23,11 +23,13 @@ const ConvocatoriaScreen = () => {
             active.allDay = false;
             return active;
         }) : [];
+
         
     return <div className='convocatoria_container'>
         <Calendar listEvents={ eventsActives }/>
 
         <div className="container_father_fab">
+            <Fab color='cyan' toggle={ !fab?.view  } icon='visibility' click={ () => dispatch(openModal()) }/>
             <Fab color='cyan' toggle={ !fab?.plus } icon='add' click={ () => dispatch(openModal()) }/>
             <Fab color='cyan' toggle={ !fab?.edit } icon='edit' click={ () => dispatch(openModal()) }/>
             <Fab color='red' tono_color='lighten-1' toggle={ !fab?.del } click={ () => { if(conv_activa) return dispatch(startDelAnnoucement(conv_activa)) }} icon='delete'/>

@@ -3,6 +3,7 @@ export interface i_auth_state {
     username: string;
     email: string;
     checking?: boolean;
+    rol: string;
 }
 
 

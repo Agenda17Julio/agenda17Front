@@ -5,19 +5,23 @@ const init:i_state = {
     loading: false,
     modal: false,
     fab: {
-        plus: undefined,
-        edit: undefined,
-        del: undefined
+        plus: false,
+        edit: false,
+        del: false,
+        view: false
     },
     calendarDate: new Date(),
     pagina: 1,
-    showfile: undefined
+    files: [],
+    activefile: undefined,
+    delactivefile: false
 }
 
 const uiReducer = ( state = init, action: i_action ):i_state => {
     const { startLoading, stopLoading, openModal, closeModal, setCalendarDate,
         activePlusFab, activeEditFab, clearActiveFab, clearCalendarDate, setPag, 
-        clearPag, showFile } = types;
+        clearPag, setFiles,deleteFileLocal,setActiveFile,clearDelActiveFile,
+        clearActiveFile,delActiveFile,clearAllFiles,activeView,clearAllUI } = types;
     
     const { type,payload } = action;
 
@@ -52,9 +56,23 @@ const uiReducer = ( state = init, action: i_action ):i_state => {
                 fab: {
                     plus: true,
                     edit: false,
-                    del: false
+                    del: false,
+                    view: false
                 }
             }
+
+            break;
+        case activeView: 
+            state = {
+                ...state,
+                fab: {
+                    plus: false,
+                    edit: false,
+                    del : false,
+                    view: true
+                }
+            }
+
             break;
         case activeEditFab:
             state = {
@@ -62,7 +80,8 @@ const uiReducer = ( state = init, action: i_action ):i_state => {
                 fab: {
                     plus: false,
                     edit: true,
-                    del: true
+                    del: true,
+                    view: false
                 }
             }
             break;
@@ -72,6 +91,7 @@ const uiReducer = ( state = init, action: i_action ):i_state => {
                 fab: init.fab
             };
             break;
+
         case setCalendarDate:
             if(payload)
                 state = {
@@ -98,14 +118,50 @@ const uiReducer = ( state = init, action: i_action ):i_state => {
                 pagina: init.pagina
             }
             break;
-        case showFile:
-            console.log(true)
-            if(payload?.showfile)
-                state = {
-                    ...state,
-                    showfile: payload.showfile
-                }
+        case setFiles:
+            state = {
+                ...state,
+                files: payload?.files
+            }
             break;
+        case deleteFileLocal: {
+            state = {
+                ...state,
+                files: state.files?.filter(f => f.name !== payload?.filename)
+            }
+            break;
+        }
+        case setActiveFile:
+            state = {
+                ...state,
+                activefile: payload?.activefile
+            }
+            break;
+        case clearActiveFile: 
+            state = {
+                ...state,
+                activefile: init.activefile
+            }
+            break;
+        case delActiveFile:
+            state = {
+                ...state,
+                delactivefile: true
+            }
+            break;
+        case clearDelActiveFile:
+            state = {
+                ...state,
+                delactivefile: init.delactivefile
+            }
+            break;
+        case clearAllFiles:
+            state = {
+                ...state,
+                files: init.files
+            }
+            break;
+        case clearAllUI: state = init; break;
     }
 
 

@@ -2,9 +2,8 @@ import FullCalendar,{ EventSourceInput } from '@fullcalendar/react';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearActiveAnnoucement, loadActiveAnnoucement } from '../../actions/convocatoria';
-import { activePlusFab, clearActiveFab, activeEditDeleteFab, setCalendarDate,clearCalendarDate } from '../../actions/ui';
+import { activePlusFab, clearActiveFab, activeEditDeleteFab, setCalendarDate,clearCalendarDate, setActiveView } from '../../actions/ui';
 import { i_event_calendar } from '../../interfaces/helper/calendar';
-import { i_events_convocatoria } from '../../interfaces/helper/events';
 import { 
     titleFormat,
     buttonText,
@@ -19,17 +18,17 @@ import {
 import { i_argsStr } from '../../interfaces/helper/calendar';
 import { i_redux } from '../../interfaces/redux';
 
-const Calendar = ( {listEvents}:{ listEvents:any }) => {
+const Calendar = ( {listEvents}:{ listEvents:EventSourceInput }) => {
    
     const dispatch = useDispatch();
-    const { ui:{fab},conv:{active} } = useSelector((info:i_redux) => info);
+    const { ui:{fab},conv:{active},auth: {rol} } = useSelector((info:i_redux) => info);
   
     const handleOnClickDate = ({ dateStr,date }:i_argsStr) => {
 
         if( active ) dispatch(clearActiveAnnoucement());
             
-        if ( moment(dateStr).format('yyyy-MM-DD') < currentDate.format('yyyy-MM-DD') ) {
-            if( fab?.plus || fab?.edit || fab?.del ){
+        if ( moment(dateStr).format('yyyy-MM-DD') < currentDate.format('yyyy-MM-DD')) {
+            if( fab?.plus || fab?.edit || fab?.del || fab?.view ){
                 dispatch(clearCalendarDate());
                 return dispatch(clearActiveFab());
             }else {
@@ -37,7 +36,7 @@ const Calendar = ( {listEvents}:{ listEvents:any }) => {
             }
         }else{
             dispatch(setCalendarDate(date));
-            if(!fab?.plus) dispatch(activePlusFab());
+            if(!fab?.plus && Number(rol) === 1 ) dispatch(activePlusFab());
         }
        
     }
@@ -45,9 +44,14 @@ const Calendar = ( {listEvents}:{ listEvents:any }) => {
     const handleEventClick = ({ event }:i_event_calendar) => {
         const { id,start,title,extendedProps } = event;
 
-        dispatch(activeEditDeleteFab());
+        
+        if( Number(rol) === 1 ){
+            dispatch(activeEditDeleteFab());
+        }else {
+            dispatch(setActiveView());        
+        }
        
-        const active:i_events_convocatoria = {
+        const active:any = {
             ...extendedProps,
             id,
             title,

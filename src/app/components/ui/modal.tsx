@@ -1,7 +1,8 @@
 import { createPortal } from 'react-dom'
-import { useEffect, useRef, useState } from "react";
-import { startAddAnnoucement, clearListConv, startUpdateAnnoucement, startDownload } from "../../actions/convocatoria";
-import { clearActiveFab, closeModal } from "../../actions/ui";
+import { useEffect, useRef,useState } from "react";
+import { ChipsOptions, ModalOptions } from "materialize-css";
+import { startAddAnnoucement,clearListConv, startUpdateAnnoucement,startDownload, setListConv, deleteFileServer, startDelFileServer } from "../../actions/convocatoria";
+import { clearActiveFab, clearActiveFile, clearAllFiles, clearCalendarDate, clearDelActiveFile, closeModal, delActiveFile, delFile, setActiveFile, setFileAll, startLoading } from "../../actions/ui";
 import { i_redux } from "../../interfaces/redux";
 import { useDispatch, useSelector } from 'react-redux';
 import { i_event_resp } from '../../interfaces/helper/events';
@@ -10,8 +11,8 @@ import { Editor } from '@tinymce/tinymce-react';
 import { config } from '../../helpers/htmlEditor';
 import TimeKeeper from 'react-timekeeper';
 import UseForm from "../../hooks/useForm";
-import MaterializeHelper from '../../helpers/materialize';
-
+import Fab from './fab';
+import Swal from 'sweetalert2';
 
 const portal = document.getElementById('portal-modal') as HTMLElement;
 
@@ -19,71 +20,291 @@ const Modal = () => {
 
     const ref = useRef<any>(null);
     const ref_chip = useRef<any>(null);
+    const refadjunto_chip = useRef<any>(null);
     const dispatch = useDispatch();
-    const { ui: { fab }, conv: { active } } = useSelector((info: i_redux) => info);
+    const { ui:{ fab,files,activefile,modal,delactivefile }, conv: { active,users }, auth:{rol} } = useSelector((info:i_redux) => info);
 
 
-    const {
-        ui: { calendarDate },
-        conv: { listConv },
-        auth: { uid, username, email }
-    } = useSelector((info: i_redux) => info);
+    const { 
+        ui:{calendarDate},
+        conv:{listConv},
+        auth:{uid,username,email} 
+    } = useSelector((info:i_redux) => info );
 
 
-    let init: i_event_resp = {
-        asunto: '',
+    let init:i_event_resp = {
+        asunto:'',
         fecha: calendarDate || new Date(),
         detalle: '',
         usuario: Number(uid),
         adjunto: undefined
+    }  
+
+    
+    const [ value,handleInputOnChange,setValues,reset ] = UseForm( init );
+    let { asunto,fecha } = value as i_event_resp;
+
+    const [ valueEditor, setValueEditor ] = useState('');
+    const [ time, setTime ] = useState(moment(new Date()).minutes(30).format('HH:mm'));
+    const [ showTime, setShowTime ] = useState(false);
+    const input = (document as any).querySelector('#fileSelector') as HTMLInputElement;
+
+
+
+    const mapData = (data:Array<any>) => data.map((elem:any) => elem.tag);
+    const usuarios = users as string[];
+    let data_usr:any = {}
+
+    for (const i in usuarios) {
+        data_usr = { ...data_usr, [usuarios[i]]: null }
+    }
+
+       
+    const opciones:ModalOptions = {
+        opacity: 0.5,
+        inDuration: 250,
+        outDuration: 250,
+        preventScrolling: true,
+        startingTop: '4%',
+        endingTop: '10%',
+        dismissible: true,
+        onCloseEnd: () => {},
+        onOpenEnd: () => {},
+        onOpenStart: () => {},
+        onCloseStart: () => {
+            dispatch(closeModal());
+            dispatch( clearActiveFile() );
+            dispatch( clearDelActiveFile() );
+            dispatch(clearCalendarDate());
+            dispatch(clearActiveFab());
+        }
     }
 
 
-    const [value, handleInputOnChange, setValues, reset] = UseForm(init);
-    let { asunto, fecha, adjunto } = value as i_event_resp;
+    const opcionesChips:ChipsOptions = {
+        data:                   [],
+        placeholder:	        'Destinatarios',
+        secondaryPlaceholder:	'Add+',
+        autocompleteOptions:	{
+            data: {},
+            limit: Infinity,
+            minLength: 1
+        },
+        limit:	                Infinity,
+        onChipAdd: () => { 
 
-    const [valueEditor, setValueEditor] = useState('');
-    const [time, setTime] = useState(moment(new Date).minutes(30).format('HH:mm'));
-    const [showTime, setShowTime] = useState(false);
-    const input = (document as any).querySelector('#fileSelector') as HTMLInputElement;
+            instanceChips.chipsData.forEach(({tag}:{tag:string}, index:number) => {
+                if(!validateEmail(tag)){
+                    instanceChips.deleteChip( index );
+                }
+            })
+            dispatch(setListConv(mapData(instanceChips.chipsData)))
+        },
+        onChipSelect: () => {},
+        onChipDelete: () => dispatch(setListConv(mapData(instanceChips.chipsData)))   
+    }
+
+    const deleteWarning = (msg:string, callback:Function, fileserver:boolean) => Swal.fire({
+        title: 'Estas seguro?',
+        text: msg,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, eliminar!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+            callback();
+
+            if( fileserver ) {
+                return Swal.fire({
+                    title: 'Espere un momento!',
+                    text:  'La acción solicitada se esta procesando',
+                    icon:  'warning',
+                    timer: 2000
+            })} else {
+                return Swal.fire({
+                    title: 'Todo salio bien!',
+                    text:  'La acción se completo correctamente!',
+                    icon:  'success',
+                    timer: 2000
+                })
+            }
+        }else {
+            return;
+        }
+      })
+
+
+    const opcionesAdjuntoChips:ChipsOptions = {
+        ...opcionesChips,
+        placeholder: 'Adjuntos',
+        onChipAdd: () => {},
+        onChipSelect: (e,f) => dispatch(setActiveFile(String(f.textContent))),
+        onChipDelete: () => null
+    } 
+
+  
+    let modalInstance:M.Modal;
+    let instanceChips:M.Chips;
+    let instanceAdjuntoChips:M.Chips;
+
+
+    useEffect(() => {
+        init = {
+            ...init,
+            fecha: calendarDate || new Date()
+        }
+
+        if( active ) {
+            init = {
+                asunto: String(active.asunto),
+                fecha: active.fecha as any,
+                detalle: String(active.detalle),
+                usuario: Number(active.usuario),
+                adjunto: active.adjunto as any
+            }
+            setTime(moment(active.fecha).format('HH:mm'));
+            setValueEditor(String(active?.detalle))
+
+        }
+        setValues(init)
+
+        return () => reset();
+    },[ active,calendarDate ]);
+
+
+    useEffect(() => {
+        instanceAdjuntoChips = M.Chips.init(refadjunto_chip.current, opcionesAdjuntoChips);
+
+        const inputAdChip = window.document.querySelectorAll('.chips')[1] as any;
+        inputAdChip.firstElementChild.readOnly=true;
+
+        setTimeout(() => {
+            const children = inputAdChip.children;
+            for (const i in children) {
+                if(children[i].className === 'chip'){
+                    const node = children[i].children[0];
+                    if( node ){
+                        children[i].removeChild(node);
+                    }
+                }
+            }
+        },10);
+
+
+        let isfileserver = false;
+
+        const deleteFileAction = ( ) => {
+
+            const data = instanceAdjuntoChips.chipsData;
+    
+            for (const i in data) {
+                if( data[i].tag === activefile ){
+                    instanceAdjuntoChips.deleteChip(Number(i));
+                }
+            }
+
+            for (const j in active?.files) {
+                if( active?.files[Number(j)] === activefile) {
+                    isfileserver = true;
+                    dispatch( deleteFileServer(String(activefile)) );
+                    dispatch( startLoading() );
+                    dispatch( startDelFileServer(String(active?.id), String(activefile)) );
+                }
+            }
+
+            for (const i in files) {
+                if( files[Number(i)].name === activefile ){
+                    dispatch(delFile(String(activefile)))
+                }
+            }
+
+            dispatch(clearDelActiveFile());
+            dispatch( clearActiveFile() );
+        }
+
+
+        if( delactivefile ){
+             deleteWarning('Esta acción es irreversible, ten en cuenta que el archivo puede estar alojado en el servidor', deleteFileAction, isfileserver);
+             
+        }
+
+
+        if( active?.files && files ){
+            
+            let data:any = [];
+            
+            for (const i in active?.files) {
+                data.push(active?.files[i])
+            }
+            
+            for (const i in files) {
+                data.push(files[i].name)
+            }
+            
+            for (const i in data) {
+                instanceAdjuntoChips.addChip({tag: data[i]})
+            }
+            
+        }else if( active?.files ){
+            for (const i in active?.files) {
+                instanceAdjuntoChips.addChip({tag: active?.files[i]})
+            }
+        }else if( files ){
+            for (const i in files) {
+                instanceAdjuntoChips.addChip({tag: files[i].name})
+            }
+        }
+
+        return () => instanceAdjuntoChips.destroy();
+
+    },[ modal,delactivefile,files ])
 
 
     useEffect(() => {
 
-        init = {
-            ...init,
-            fecha: calendarDate || new Date
-        }
+        modalInstance = M.Modal.init(ref.current, opciones);    
+        instanceChips = M.Chips.init(ref_chip.current, opcionesChips);
+       
 
-        if (active) {
-            init = {
-                asunto: active.asunto,
-                fecha: active.fecha,
-                detalle: active.detalle,
-                usuario: active.usuario,
-                adjunto: active.adjunto
+        instanceChips.autocomplete.options.data = data_usr;
+       
+
+        if( active?.to ){
+            for (const i in active.to) {
+                instanceChips.addChip({tag:active.to[i]})
             }
-            setTime(moment(active.fecha).format('HH:mm'));
-            setValueEditor(active.detalle)
-
         }
-        setValues(init)
-        return () => reset();
-    }, [calendarDate, active])
+        
+        if( modal ) modalInstance.open();
 
-    MaterializeHelper(ref, ref_chip);
+        // modalInstance.el.addEventListener('click', handleClickEvent)
+        
+        return () => {
+            modalInstance.destroy();
+            instanceChips.destroy();
+            // document.removeEventListener('click', handleClickEvent);
+            
+        };
+        
+    },[modal]);
 
 
-    const handleEditor = (evt: any, editor: any) => {
-        setValueEditor(editor.getContent({ format: 'html' }));
+    const handleEditor = (evt:any, editor:any) => {
+        setValueEditor(editor.getContent({format: 'html'}));
     }
 
     const handleUploadFiles = () => input.click();
+  
+    const handleOnChangeInputFiles = ({target}:{target:HTMLInputElement}) => {
+        const { files } = target;
+        files?.length && dispatch( setFileAll( Array.from(files) ) );
+    }
 
-
-    const handleSubmit = (e: Event) => {
+    const handleSubmit = (e:Event) => {
         e.preventDefault();
-        const [hora, minuto] = time.split(':');
+        const [ hora, minuto ] = time.split(':');
         value.detalle = valueEditor;
         value.fecha = moment(fecha).hour(Number(hora)).minute(Number(minuto)).toDate();
         value.from = {
@@ -93,166 +314,181 @@ const Modal = () => {
 
         value.to = listConv;
 
-        if (active) {
+
+        if( active ){
             value.id = active.id;
-            dispatch(startUpdateAnnoucement(value));
-        } else {
-            dispatch(startAddAnnoucement(value));
+            dispatch( startLoading() );
+            dispatch( startUpdateAnnoucement(value,files as File[]) );
+        }else {
+            dispatch( startLoading() );
+            dispatch( startAddAnnoucement(value,files as File[]) );
         }
-        dispatch(clearActiveFab());
-        dispatch(clearListConv());
-        dispatch(closeModal());
+        dispatch( clearActiveFab() );
+        dispatch( clearListConv() );
+        dispatch( closeModal() );
+        dispatch( clearAllFiles() );
         setValueEditor('');
-        (document as any).querySelector('#fileSelector').value = '';
+
+        (document as any).querySelector('#fileSelector').value='';
         reset();
     }
 
-    return createPortal(<div id="modal1" className="modal" ref={ref}>
+
+    const handleActivefile = () => {
+        let res = true;
+
+        for (const i in active?.files) {
+           if( activefile === active?.files[Number(i)] ){
+               res=false;
+           }
+        }
+
+        return res;
+    }
+
+    return createPortal( <div id="modal1" className="modal" ref={ ref }> 
         <div className="modal-content">
             <h4>{
-                fab?.plus ? 'Crear Convocatoria' : 'Editar Convocatoria'
+                fab?.plus ? 'Crear Convocatoria' : 'Visualizar Convocatoria'
             }</h4>
-            <div className="row">
-                <form onSubmit={handleSubmit as any} className='col s12'>
-                    <br />   <br />
-                    <div className="row col s12">
-                        <div className="input-field col s12">
-                            <i className="material-icons prefix">subject</i>
-                            <label htmlFor="asuntoid">Asunto</label>
-                            <input
-                                type="text"
-                                id="asuntoid"
-                                name='asunto'
-                                value={asunto}
-                                onChange={handleInputOnChange}
-                                minLength={0}
-                                maxLength={30}
-                                autoComplete='off'
-                            />
-                        </div>
-                    </div>
 
-                    <div className="input-field row col s12 modalDate">
-                        <div className="inputFecha col s6">
-                            <i className="material-icons prefix">date_range</i>
-                            <input
-                                type="date"
-                                id="dateid"
-                                name='fecha'
-                                min={active ? '' : moment(new Date()).format('YYYY-MM-DD')}
-                                value={moment(fecha).format('YYYY-MM-DD')}
-                                onChange={handleInputOnChange}
-                            />
-                        </div>
-                        <div id='timeid' className="col s6">
-                            <i
-                                className="material-icons prefix"
-                                id='icontime'
-                                onClick={() => setShowTime(!showTime)}
+            <form onSubmit={ handleSubmit as any } className='modalForm'>
+                <br /><br />
+
+                <div className="input-field col s6">
+                    <i className="material-icons prefix">subject</i>
+                    <input 
+                        type="text"
+                        id="asuntoid"
+                        name='asunto'
+                        placeholder='Asunto'
+                        value={ asunto }
+                        onChange={ handleInputOnChange }
+                        minLength={0}
+                        maxLength={30} 
+                        autoComplete='off'
+                        disabled={Number(rol) !== 1}
+                    />
+                </div><br />
+            
+                <div className="input-field col s6 modalDate">
+                    <i className="material-icons prefix">date_range</i>
+                    <input 
+                        type="date"
+                        id="dateid"
+                        name='fecha'
+                        min={ active ? '' :moment(new Date()).format('YYYY-MM-DD') }
+                        value={ moment(fecha).format('YYYY-MM-DD') }
+                        onChange={ handleInputOnChange }
+                        disabled={Number(rol) !== 1}
+                    />
+                    <div id='timeid'>
+                        <i 
+                            className="material-icons prefix"
+                            id='icontime'
+                            onClick={() => Number(rol) === 1 && setShowTime(!showTime)}
+                            
                             >access_time
-                            </i>
-                            <input
-                                type="text"
-                                name='hora'
-                                value={time}
-                                readOnly={true}
-                            />
-                            {showTime &&
-                                <TimeKeeper
-                                    time={time}
-                                    onChange={(newTime) => setTime(newTime.formatted24)}
-                                    onDoneClick={() => setShowTime(false)}
-                                    switchToMinuteOnHourSelect
-                                />
-                            }
-                        </div>
-                    </div>
-
-                    <div className="input-field row col s12">
-                        <div className="row col s12">
-                            <i className="material-icons prefix">account_circle</i>
-                            <div className="chips chips-autocomplete" ref={ref_chip}></div>
-                        </div>
-                    </div>
-
-
-                    <div className='input-field row col s12 modalattachment'>
-                        <div className='input-field col s12'>
-                            <i className="material-icons prefix">edit</i>
-                            <label htmlFor="">Detalle</label>
-                        </div>
-                    </div>
-
-                    <div className="input-field col s12 modaleditor">
-                        <Editor
-                            id='detalleid'
-                            value={valueEditor}
-                            onEditorChange={handleEditor}
-                            outputFormat='html'
-                            init={config}
+                        </i>
+                        <input 
+                            type="text"
+                            name='hora'
+                            value={ time }
+                            readOnly={ true }  
+                            disabled={Number(rol) !== 1}
                         />
-                    </div>
-
-
-                    <div className='col s12 row modalattachment'>
-
-                        <div className='input-field col s12 attachment'>
-                            <i
-                                className="material-icons prefix "
-                                onClick={handleUploadFiles}
-                            >attach_file
-                            </i>
-                            <label htmlFor="">Adjuntos</label>
-
-                            <input
-                                type="file"
-                                id='fileSelector'
-                                name="adjunto"
-                                onChange={handleInputOnChange}
-                                multiple={true}
-                                style={{ display: 'none' }}
+                        {showTime &&
+                            <TimeKeeper
+                                time={time}
+                                onChange={(newTime) => setTime(newTime.formatted24)}
+                                onDoneClick={() => setShowTime(false)}
+                                switchToMinuteOnHourSelect
                             />
-                            <br /><br /><br />
-                            <div>
-                                {
-                                    active ? active.files?.map((f, index) => <div
-                                        onClick={() => startDownload(String(active.id), f)}
-                                        key={index}> {f}
-
-                                    </div>) : adjunto && Array.from(adjunto).map((file: any) => <div
-                                        key={file.name}>
-                                        {file.name}
-                                    </div>)
-
-                                }
-
-                                {/*  */}
-                            </div>
-                        </div>
+                        }
                     </div>
+                </div><br />
 
-                    <div className="col s12 row">
 
-                        <button
+                <div className="input-field col s6">
+                    <i className="material-icons prefix">account_circle</i>
+                    <div className="chips chips-autocomplete" ref={ ref_chip }></div>
+                </div><br />
+
+                <div className="input-field col s6">
+                    <i className="material-icons prefix" onClick={ handleUploadFiles } style={{cursor:'pointer'}}>attach_file</i>
+                    <div className="chips"  ref={ refadjunto_chip }></div>
+                    <input 
+                        type="file" 
+                        id='fileSelector'
+                        onChange={ handleOnChangeInputFiles }
+                        multiple={ true }
+                        style={{display:'none'}}
+                        disabled={Number(rol) !== 1}
+                    />
+                </div>
+
+                <div className=' modalattachment'>
+                    <div className='input-field col s6'>
+                        <i className="material-icons prefix">edit</i>
+                        <label htmlFor="">Detalle</label>
+                    </div>
+                </div>
+
+                <div className="input-field col s6 modaleditor">       
+                    <Editor
+                        id='detalleid'
+                        value={ valueEditor }
+                        onEditorChange={ handleEditor }
+                        outputFormat='html'
+                        init={ config }
+                        disabled={Number(rol) !== 1}
+                    />
+                </div>    
+          
+                <div className='container_btn_modal'>
+                    {
+                        Number(rol) === 1 &&  <button 
                             type="submit"
-                            className='btn  waves-effect waves-light primary col s6'
-                        >Agendar
-                        </button>
-
-
-                        <button
-                            type="button"
-                            onClick={() => dispatch(closeModal())}
-                            className='btn waves-effect waves-light red lighten-2 primary col s6'
+                            className='btn waves-effect waves-light primary'
+                            >Agendar
+                        </button> 
+                    }
+                   
+                    <button 
+                        type="button"
+                        onClick={ () => dispatch(closeModal()) }
+                        className='btn waves-effect waves-light red lighten-2 primary'
                         >Cancelar
-                        </button>
+                    </button>
 
-                    </div>
-                </form>
+
+                </div>
+            </form> 
+            <div className="container_fab">
+                <div className="container_fab_modal">
+                    <Fab color='cyan' toggle={ handleActivefile() } icon='file_download' click={ () => {
+                        dispatch(startLoading());
+                        dispatch(startDownload(String(active?.id), String(activefile))) }
+                    }/>
+                    {
+                        Number(rol) === 1 && <Fab color='red' toggle={ activefile ? false : true } icon='delete' click={ () => {
+                            dispatch(delActiveFile());
+                        }}/>
+                    }
+                </div>
             </div>
         </div>
-
+        
     </div>, portal)
+}
+
+
+
+
+
+function validateEmail(email:string) {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
 }
 
 export default Modal;

@@ -1,0 +1,32 @@
+
+.container_fab {
+    position: sticky;
+    width: 100%;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    height: fit-content;
+    justify-content: flex-end;
+    z-index: 20;
+    
+    &_modal {
+        & > .fab {
+            margin: .5em 0;
+            transform: scale(1);
+            transition: all .4s ease-in-out;
+            display: flex;
+            justify-content: flex-end;
+            
+        }
+    
+        & > .toggle-hidden {
+            transform: scale(0);
+            position: absolute;
+        }
+    }
+
+}
+
+.container_btn_modal *{
+    z-index: 40;
+}

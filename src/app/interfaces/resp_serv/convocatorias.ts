@@ -9,11 +9,11 @@ export interface i_resp_active_annoucements {
 
 export type i_event_resp = {
     id?: string;
-    adjunto: FileList;
-    asunto: string;
-    detalle: string; 
-    fecha: Date;
-    usuario: number;
+    adjunto?: File[];
+    asunto?: string;
+    detalle?: string; 
+    fecha?: Date;
+    usuario?: number;
     from?: {
         name: string;
         address: string;
