@@ -19,11 +19,11 @@ const ConvocatoriaScreen = () => {
 
     return <>
      
-        <div className="row">
-            <div className="col s12 m4 l3 xl4">
+        <div className="row contentCalendar">
+            <div className="col s12 m4 l3 xl4 lisConv">
                 <ListConvocatorias />
             </div>
-            <div className="col s12 m8 l9 xl8">
+            <div className="col s12 m8 l9 xl8 calendar">
                 <Calendar />
             </div>
         </div>

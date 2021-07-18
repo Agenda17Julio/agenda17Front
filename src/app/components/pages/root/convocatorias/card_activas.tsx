@@ -8,7 +8,7 @@ const CardActiveAnnoucements = (event: i_event_resp) => {
 
   const { asunto, detalle, fecha } = event;
   const dispatch = useDispatch();
- 
+
   const date = moment(fecha).fromNow();
 
   const handleClick = () => {
@@ -24,7 +24,9 @@ const CardActiveAnnoucements = (event: i_event_resp) => {
         <span className="card-title col s6 m12 l6">{asunto}</span>
         <span className="card-fecha col s6 m12 l6">{date}</span>
       </div>
-      <p className='card-text' dangerouslySetInnerHTML={{__html: String(detalle)}}></p>
+      <div className="detalle">
+        <p className='card-text' dangerouslySetInnerHTML={{ __html: String(detalle) }}></p>
+      </div>
       <div className="card-container-img">
         <img
           src="https://images.photowall.com/products/60869/azores-mountain-landscape-1.jpg?h=699&q=85"

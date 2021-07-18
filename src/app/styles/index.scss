@@ -2,3 +2,9 @@
 @import './components/index.scss';
 @import './components/root/convocatoria';
 @import './components/root/card';
+@import './components/root/list';
+
+html, body{
+    height: 100%;
+    width: 100%;
+}

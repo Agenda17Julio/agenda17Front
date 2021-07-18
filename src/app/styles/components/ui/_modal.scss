@@ -1,4 +1,15 @@
 
+    .modal {
+        padding: 24px !important;
+        border-radius: 5px;
+        .modal-content {
+            padding: 0;
+        }
+        .row {
+            padding: 0;
+        }
+    }
+
 .container_fab {
     position: sticky;
     width: 100%;
