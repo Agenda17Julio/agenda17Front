@@ -4,6 +4,7 @@ import types from '../types';
 const init:i_state = {
     loading: false,
     modal: false,
+    modalactas: false,
     fab: {
         plus: false,
         edit: false,

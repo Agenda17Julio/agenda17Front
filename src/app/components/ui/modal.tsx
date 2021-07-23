@@ -1,8 +1,8 @@
 import { createPortal } from 'react-dom'
 import { useEffect, useRef,useState } from "react";
-import { ChipsOptions, ModalOptions } from "materialize-css";
+import { ChipsOptions } from "materialize-css";
 import { startAddAnnoucement,clearListConv, startUpdateAnnoucement,startDownload, setListConv, deleteFileServer, startDelFileServer } from "../../actions/convocatoria";
-import { clearActiveFab, clearActiveFile, clearAllFiles, clearCalendarDate, clearDelActiveFile, closeModal, delActiveFile, delFile, setActiveFile, setFileAll, startLoading } from "../../actions/ui";
+import { clearActiveFab, clearActiveFile, clearAllFiles, clearDelActiveFile, closeModal, delActiveFile, delFile, setActiveFile, setFileAll, startLoading } from "../../actions/ui";
 import { i_redux } from "../../interfaces/redux";
 import { useDispatch, useSelector } from 'react-redux';
 import { i_event_resp } from '../../interfaces/helper/events';
@@ -13,6 +13,7 @@ import TimeKeeper from 'react-timekeeper';
 import UseForm from "../../hooks/useForm";
 import Fab from './fab';
 import Swal from 'sweetalert2';
+import { Modal as OptionsModal } from '../../helpers/materialize';
 
 const portal = document.getElementById('portal-modal') as HTMLElement;
 
@@ -58,28 +59,6 @@ const Modal = () => {
     for (const i in usuarios) {
         data_usr = { ...data_usr, [usuarios[i]]: null }
     }
-
-       
-    const opciones:ModalOptions = {
-        opacity: 0.5,
-        inDuration: 250,
-        outDuration: 250,
-        preventScrolling: true,
-        startingTop: '4%',
-        endingTop: '10%',
-        dismissible: true,
-        onCloseEnd: () => {},
-        onOpenEnd: () => {},
-        onOpenStart: () => {},
-        onCloseStart: () => {
-            dispatch(closeModal());
-            dispatch( clearActiveFile() );
-            dispatch( clearDelActiveFile() );
-            dispatch(clearCalendarDate());
-            dispatch(clearActiveFab());
-        }
-    }
-
 
     const opcionesChips:ChipsOptions = {
         data:                   [],
@@ -264,7 +243,7 @@ const Modal = () => {
 
     useEffect(() => {
 
-        modalInstance = M.Modal.init(ref.current, opciones);    
+        modalInstance = M.Modal.init(ref.current, OptionsModal(dispatch));    
         instanceChips = M.Chips.init(ref_chip.current, opcionesChips);
        
 
