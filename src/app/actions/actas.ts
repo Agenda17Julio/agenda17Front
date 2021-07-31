@@ -105,7 +105,6 @@ export const startDeleteActa = (acta:i_acta) => (callback:Function,redux: () => 
             }
         }
     })
-    
 }
 
 export const startGetActas = () => async ( callback:Function, redux: () => i_redux ) => {
@@ -157,7 +156,6 @@ export const startAddNewActa = (values:any, asunto:string) => async ( callback:F
         }else {
             callback( startGetActas() );
         }
-       
     }
 }
 
@@ -181,6 +179,7 @@ export const startUpdateActa = ( values:any, asunto:string, id_acta:number ) => 
     const { ok, adjuntos_res } = await resp.json();
 
     if( ok ){
+        console.log(adjuntos_res)
         callback(updateActa({
             id: id_acta,
             asunto,

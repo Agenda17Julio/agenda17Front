@@ -1,10 +1,13 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { startDeleteFile, startDownloadFile } from "../../../../../actions/actas";
+import { i_redux } from "../../../../../interfaces/redux";
 import ModalActas from "../../../../ui/modal_actas";
 
 const AdjuntosActas = ({ adjuntos, isOpen, setOpenModal }:{adjuntos:Array<any>,isOpen:boolean, setOpenModal:Function}) => {
 
     const dispatch = useDispatch();
+
+    const { rol } = useSelector((i:i_redux) => i.auth);
 
     const handleDeleteFile = (acta:number, filename:string, id:number) => {
         dispatch(startDeleteFile(acta, filename, id));
@@ -37,12 +40,14 @@ const AdjuntosActas = ({ adjuntos, isOpen, setOpenModal }:{adjuntos:Array<any>,i
                             onClick={ () => handleDownloadFile(adjunto.acta, adjunto.filename) }
                             >file_download
                         </i>
-                        <i 
-                            className="material-icons" 
-                            style={{cursor:'pointer'}}
-                            onClick={ () => handleDeleteFile(adjunto.acta, adjunto.filename, adjunto.id) }
-                            >delete
-                        </i>
+                        {
+                            Number(rol) === 1 && <i 
+                                className="material-icons" 
+                                style={{cursor:'pointer'}}
+                                onClick={ () => handleDeleteFile(adjunto.acta, adjunto.filename, adjunto.id) }
+                                >delete
+                            </i>
+                        }
                     </td>
                 </tr>)
             }</tbody>

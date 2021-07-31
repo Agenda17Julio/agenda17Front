@@ -14,7 +14,7 @@ const Listado = () => {
     const [ adjuntosActa, setAdjuntosActa ] = useState<Array<any>>([]);
     const [ openModalAdj, setOpenModalAdj ] = useState(false);
 
-    const {  allactas: actas, registros  } = useSelector((i:i_redux) => i.actas);
+    const {  actas: {allactas: actas, registros}, auth: { rol }  } = useSelector((i:i_redux) => i);
 
     const handleOnclickAdj = (adjuntos?:Array<any>) => {
         if( adjuntos && adjuntos.length > 0 ) {
@@ -60,12 +60,14 @@ const Listado = () => {
                                             onClick={ () => handleOnclickAdj(acta.adjuntos) }
                                             >insert_drive_file
                                         </i>
-                                        <i 
-                                            className="material-icons" 
-                                            style={{cursor:'pointer',margin: '.2em'}}
-                                            onClick={ () => handleDeleteAdj(acta) }
-                                            >delete
-                                        </i>
+                                        {
+                                            Number(rol) === 1 &&  <i 
+                                                className="material-icons" 
+                                                style={{cursor:'pointer',margin: '.2em'}}
+                                                onClick={ () => handleDeleteAdj(acta) }
+                                                >delete
+                                            </i>
+                                        }
                                     </td>
                                 </tr>)
                             }

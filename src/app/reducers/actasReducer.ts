@@ -48,12 +48,18 @@ const ActasReducer = ( state:i_state = { allactas:[], registros: 1 }, { type, pa
             }
         break;
         case updateActa:
-            state = {
+            if (state.allactas) state = {
                 ...state,
                 allactas: state.allactas?.map(acta => {
-                    if( acta.id === payload?.aux.id ){
-                        return payload?.aux;
+                    if(acta.adjuntos && payload?.aux){
+                        console.log(payload.aux)
+                        acta.adjuntos = [
+                            ...acta.adjuntos,
+                            ...payload?.aux.adjuntos
+                        ]
                     }
+
+                    console.log(acta)
                     return acta;
                 })
             }

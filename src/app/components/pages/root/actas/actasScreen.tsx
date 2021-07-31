@@ -10,7 +10,7 @@ const ActaScreen = () => {
 
 
     const dispatch = useDispatch();
-    const { pagina } = useSelector((i:i_redux) => i.ui);
+    const { ui:{ pagina }, auth:{ rol } } = useSelector((i:i_redux) => i);
 
     useEffect(() => {
         dispatch(startGetActas());
@@ -19,7 +19,10 @@ const ActaScreen = () => {
 
     return <div>
         <Listado/>
-        <AddActa/>
+        {
+            Number(rol) === 1 && <AddActa/>
+        }
+        
     </div>
 }
 
