@@ -28,8 +28,6 @@ export const startLoadActiveAnnoucements = () => async( callback:Function ) => {
 
     
     if( ok ){
-
-        console.log(data)
         for (const i in data) {
             data[i].to = JSON.parse(data[i].to as any);
         }
@@ -37,6 +35,8 @@ export const startLoadActiveAnnoucements = () => async( callback:Function ) => {
         callback( stopLoading() );
     }
 }
+
+
 
 export const startAddAnnoucement = ( values:i_event_resp, adjunto:File[] ) => async ( callback:Function ) => {
 
@@ -357,10 +357,6 @@ export const startDownload = (id:string, filename: string) =>  async (callback:F
     const resp = await fetchWithToken({url:`/convocatoria/files/${id}/${filename}`});
     const file = await resp.blob();
 
-    // const url = URL.createObjectURL(file);
-    // const tabOrWindow = window.open(`${url.normalize()}${filename}`, '_blank') as Window;
-    // tabOrWindow.focus();
-    // console.log(url)
 
     const a = document.createElement('a');
     document.body.appendChild(a);

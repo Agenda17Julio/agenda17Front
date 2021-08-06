@@ -3,11 +3,13 @@ import thunk from 'redux-thunk';
 import AuthReducer from '../reducers/authReducer';
 import uiReducer from '../reducers/uiReducer';
 import convocatoriaReducer from '../reducers/convocatoriasReducer';
+import ActasReducer from '../reducers/actasReducer';
 
 const reducers = combineReducers({
     auth: AuthReducer,
     ui: uiReducer,
-    conv: convocatoriaReducer
+    conv: convocatoriaReducer,
+    actas: ActasReducer
 });
 
 const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

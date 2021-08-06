@@ -1,6 +1,7 @@
 export interface i_ui_state {
     loading?: boolean;
     modal?: boolean;
+    modalactas?: boolean;
     fab?: i_fab_state;
     calendarDate?: Date;
     pagina?: number;

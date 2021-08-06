@@ -37,7 +37,14 @@ const types:i_types =  {
     clearAllFiles: '[UI] clear all files locals',
     activeView: '[UI] active view',
     clearAllLogoutConv: '[CONV] clear whole info',
-    clearAllUI: '[UI] clear whole ui'
+    clearAllUI: '[UI] clear whole ui',
+    deleteAnnoucementActa: '[Acta] delete file',
+    getActaAnnoucement: '[Acta] get annoucement',
+    getActa: '[Acta] get actas',
+    addNewActa: '[Acta] add new acta',
+    updateActa: '[Acta] update acta',
+    deleteActa: '[Acta] delete acta',
+    setRegActa: '[Acta] set registros'
 }
 
 
