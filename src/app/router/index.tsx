@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { BrowserRouter as Router, Switch } from 'react-router-dom';
+import { HashRouter as Router, Switch } from 'react-router-dom';
 import { PrivateRouter,PublicRouter } from './type';
 import AuthScreen from '../components/pages/auth/signin';
 import RootRoutes from './root';
