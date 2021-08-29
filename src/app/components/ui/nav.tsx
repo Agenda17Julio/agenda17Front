@@ -2,32 +2,30 @@ import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { startLogout } from '../../actions/auth';
 
-
 const NavBar = () => {
+
     const dispatch = useDispatch();
     const handleLogout = () => dispatch(startLogout());
 
-    return <nav>
-       
-        <img src="" alt="logo" className="logo" />
-        <div>
-        <ul>
-            <li>
-                <Link to="/">Convocatoria</Link>
-            </li>
-            <li>
-                <Link to="/actas">Actas</Link>
-            </li>
-        </ul>
+
+
+    return <div>
+
+        <div className="navbar-fixed">
+            <nav>
+                <div className="nav-wrapper fixed black">
+                    <a href="#" className="brand-logo hide-on-med-and-down">Logo</a>
+                    <ul id="nav-mobile" className="right">
+                        <li><Link className="navbar-item" to="/">Convocatoria</Link></li>
+                        <li><Link className="navbar-item" to="/actas">Actas</Link></li>
+                        <li className="navbar-item" onClick={handleLogout}>Logout</li>           
+                    </ul>
+                </div>
+            </nav>
         </div>
-        <div className="user">
-            <img src="" alt="imagen_de_usuario" className="userimg" />
-            <ul>
-                <li>Perfil</li>
-                <li onClick={ handleLogout }>Logout</li>
-            </ul>
-        </div>
-    </nav>
+
+    </div>
+
 }
 
 

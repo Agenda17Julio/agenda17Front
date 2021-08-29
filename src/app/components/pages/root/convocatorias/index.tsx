@@ -5,7 +5,7 @@ import { startGetUsers, startLoadActiveAnnoucements } from '../../../../actions/
 import Calendar from './calendarScreen';
 import Modal from '../../../ui/modal';
 import { startLoading } from '../../../../actions/ui';
-import { startLogout } from '../../../../actions/auth';
+
 
 const ConvocatoriaScreen = () => {
 
@@ -15,19 +15,20 @@ const ConvocatoriaScreen = () => {
         dispatch(startLoading());
         dispatch(startGetUsers());
         dispatch(startLoadActiveAnnoucements());
-    },[dispatch]);
+    }, [dispatch]);
 
     return <>
-
-        <button onClick={ () => dispatch(startLogout()) }>cerrar sesion</button>
-        <div>
-            <ListConvocatorias/>
+     
+        <div className="row contentCalendar">
+            <div className="col s12 m4 l3 xl4 lisConv">
+                <ListConvocatorias />
+            </div>
+            <div className="col s12 m8 l9 xl8 calendar">
+                <Calendar />
+            </div>
         </div>
-        <div>
-            <Calendar/>
-        </div>
 
-        <Modal/>
+        <Modal />
     </>
 }
 

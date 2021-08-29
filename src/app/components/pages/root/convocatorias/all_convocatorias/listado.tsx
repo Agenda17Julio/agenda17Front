@@ -36,7 +36,7 @@ const AllConvocatorias = () => {
     return <div>{
             !loading
             ? Number(convocatorias?.registros) >= 1 
-                ? <div>
+                ? <div className="col l9 s12 listado">
                     <table className="table">
                         <thead>
                             <tr>

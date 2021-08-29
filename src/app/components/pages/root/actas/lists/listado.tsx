@@ -75,7 +75,8 @@ const Listado = () => {
 
 
                     <Paginacion maxElem={Number(registros)}/>
-                            
+
+                      <div></div>      
                     <AdjuntosList 
                         adjuntos={adjuntosActa} 
                         isOpen={ openModalAdj }

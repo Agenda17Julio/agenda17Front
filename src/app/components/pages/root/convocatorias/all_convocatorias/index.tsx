@@ -5,7 +5,7 @@ import { setPagina } from "../../../../../actions/ui";
 import Listado from './listado';
 import Search from './search';
 
-const Convocatorias  = () => {
+const Convocatorias = () => {
     const dispatch = useDispatch();
 
     const handleBackCal = () => {
@@ -14,9 +14,11 @@ const Convocatorias  = () => {
     }
 
     return <div>
-        <Link to='/' onClick={ handleBackCal }>Regresar a Calendario</Link>
-        <Search/>
-        <Listado/> 
+        <Link to='/' onClick={handleBackCal}>Regresar a Calendario</Link>
+        <div className="row">
+            <Search />
+            <Listado />
+        </div>
     </div>
 }
 

@@ -7,16 +7,15 @@
     right: 0;
     display: flex;
     flex-direction: column-reverse;
-    margin-right: .7em;
-    margin-bottom: .7em;
+    margin-right: 0.7em;
+    margin-bottom: 0.7em;
     height: fit-content;
     z-index: 20;
 
     & > .fab {
-        margin: .5em 0;
+        margin: 0.5em 0;
         transform: scale(1);
-        transition: all .4s ease-in-out;
-        
+        transition: all 0.4s ease-in-out;
     }
 
     & > .toggle-hidden {
@@ -25,21 +24,31 @@
     }
 }
 
+.section_header {
+    margin-top: 15px;
+    .second {
+        text-align: right;
+    }
+}
 
 .modal {
     padding: 3em;
 }
+button {
+    width: 100%;
+}
 
-.modaleditor{
+.modaleditor {
     margin-top: 3em;
 }
 
-#timepeekerid, #datepicker{
+#timepeekerid,
+#datepicker {
     border: none;
     box-shadow: none;
 }
 
-.modalDate{
+.modalDate {
     display: flex;
     justify-content: space-between;
 
@@ -56,7 +65,7 @@
     cursor: pointer;
 }
 
-.modalattachment{
+.modalattachment {
     margin-bottom: 3em;
     display: flex;
     justify-content: space-between;
@@ -66,4 +75,22 @@
         cursor: pointer;
         margin-right: 2em;
     }
+}
+
+.inputFecha {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.formSearch {
+    padding: 0;
+    padding-right: 15px;
+}
+
+.detalle {
+    display: -webkit-box;
+    max-width: 200px;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }

@@ -17,7 +17,7 @@ const ActaScreen = () => {
     },[dispatch,pagina]);
    
 
-    return <div>
+    return <div className="listadoActas">
         <Listado/>
         {
             Number(rol) === 1 && <AddActa/>

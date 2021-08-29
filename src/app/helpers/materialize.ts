@@ -1,5 +1,5 @@
-import { ChipsOptions, ModalOptions } from "materialize-css";
-import { setListConv } from "../actions/convocatoria";
+import { ModalOptions } from "materialize-css";
+
 import { clearActiveFab, clearActiveFile, clearCalendarDate, clearDelActiveFile, closeModal } from "../actions/ui";
 
 
