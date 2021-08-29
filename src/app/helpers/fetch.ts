@@ -4,62 +4,66 @@ const baseURL = process.env.REACT_APP_API_URL;
 
 
 export const fetchWithoutToken = async (info:i_fetch):Promise<Response> => {
-    try {
-        const { method, data } = info;
-        const url = `${baseURL}${info.url}`;
-        if ( !method ) {
-            return fetch( url )
-        }else {
-            return fetch( url, {
-                method,
-                body: JSON.stringify( data ),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
+    return new Promise ((resolve, reject) => {
+        try {
+            const { method, data } = info;
+            const url = `${baseURL}${info.url}`;
+            if ( !method ) {
+                resolve (fetch( url ));
+            }else {
+                resolve (fetch( url, {
+                    method,
+                    body: JSON.stringify( data ),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }));
+            }
+        } catch ( err ) {
+            reject(err);
         }
-    } catch ( err ) {
-        throw new Error( err )
-    }
+    })
 }
 
 
 export const fetchWithToken = async (info:i_fetch):Promise<Response> => {
-    try {
+    return new Promise((resolve, reject) => {
+        try {
 
-        let { method, data, isjson } = info;
-        const url = `${baseURL}${info.url}`;
+            let { method, data, isjson } = info;
+            const url = `${baseURL}${info.url}`;
 
-        const token = localStorage.getItem('x-token') || '' ;
+            const token = localStorage.getItem('x-token') || '' ;
 
-        const headers:any = {
-            'X-Token': token
-        }
-        
-        if( !method ){
-            return fetch( url, { headers } );
-        }else {
-
-            let config = {
-                method,
-                body: data,
-                headers
+            const headers:any = {
+                'X-Token': token
             }
-  
-            if( isjson ) config = {
-                headers: {
-                    ...headers,
-                    'Content-type' : 'application/json'
-                },
-                method,
-                body: JSON.stringify(data)
+            
+            if( !method ){
+                resolve (fetch( url, { headers } ));
+            }else {
+
+                let config = {
+                    method,
+                    body: data,
+                    headers
+                }
+    
+                if( isjson ) config = {
+                    headers: {
+                        ...headers,
+                        'Content-type' : 'application/json'
+                    },
+                    method,
+                    body: JSON.stringify(data)
+                }
+
+                resolve (fetch(url,config ));
             }
 
-            return fetch(url,config );
+
+        } catch ( err ) {
+           reject(err)
         }
-
-
-    } catch ( err ) {
-        throw new Error( err )
-    }
+    })
 }

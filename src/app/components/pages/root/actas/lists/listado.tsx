@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { i_redux } from '../../../../../interfaces/redux';
-import ActasReducer from '../../../../../reducers/actasReducer';
 import AdjuntosList from './adjuntos';
 import Swal from 'sweetalert2';
 import { startDeleteActa } from '../../../../../actions/actas';
