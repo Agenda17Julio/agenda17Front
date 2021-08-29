@@ -5,7 +5,7 @@ import { startGetUsers, startLoadActiveAnnoucements } from '../../../../actions/
 import Calendar from './calendarScreen';
 import Modal from '../../../ui/modal';
 import { startLoading } from '../../../../actions/ui';
-import { startLogout } from '../../../../actions/auth';
+
 
 const ConvocatoriaScreen = () => {
 

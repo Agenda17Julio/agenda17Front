@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Fragment } from 'react';
 import UseForm from '../../../../hooks/useForm';
 import Fab from '../../../ui/fab';
 import ModalActas from '../../../ui/modal_actas';
@@ -13,10 +13,10 @@ const AddActa = () => {
     const dispatch = useDispatch();
     const ref_files_input = useRef<any>(null);
 
-    const { annoucement, allactas } = useSelector((i:i_redux) => i.actas);
-    
-    const [ openModal, setOpenModal ] = useState(false);
-    const [ values, inputOnChange, ,reset ] = UseForm({
+    const { annoucement, allactas } = useSelector((i: i_redux) => i.actas);
+
+    const [openModal, setOpenModal] = useState(false);
+    const [values, inputOnChange, , reset] = UseForm({
         files: [],
         convocatoria: ''
     });
@@ -24,98 +24,102 @@ const AddActa = () => {
 
     const handleAddActa = () => setOpenModal(true);
 
-    const handleShowInput =() => {
+    const handleShowInput = () => {
         ref_files_input.current.click();
     }
 
-    const handleSubmit =(e:Event) => {
+    const handleSubmit = (e: Event) => {
         e.preventDefault();
-        
-        if( Array.from(values.files).length <= 0 ){
-            return Swal.fire({title: 'Oh no!', text: 'selecciona un archivo', timer: 3000, icon: 'warning'})
-        }else if( !values.convocatoria ){
-            return Swal.fire({title: 'Oh no!', text: 'selecciona una convocatoria', timer: 3000, icon: 'warning'})
+
+        if (Array.from(values.files).length <= 0) {
+            return Swal.fire({ title: 'Oh no!', text: 'selecciona un archivo', timer: 3000, icon: 'warning' })
+        } else if (!values.convocatoria) {
+            return Swal.fire({ title: 'Oh no!', text: 'selecciona una convocatoria', timer: 3000, icon: 'warning' })
         }
 
-        
+
         let hasUpdate = false;
-        let id_acta:any = 0;
+        let id_acta: any = 0;
         let asunto = '';
-        
-        if(allactas) 
+
+        if (allactas)
             for (const i in allactas) {
-                if( allactas[i].id_conv === Number(values.convocatoria) ){
+                if (allactas[i].id_conv === Number(values.convocatoria)) {
                     hasUpdate = true;
                     id_acta = allactas[i].id;
                 }
             }
-        
 
-        if( annoucement  )
+
+        if (annoucement)
             for (const i in annoucement) {
-                if( annoucement[i].id === Number(values.convocatoria) ){
+                if (annoucement[i].id === Number(values.convocatoria)) {
                     asunto = annoucement[i].asunto;
                 }
             }
 
 
-        if( hasUpdate ) {
+        if (hasUpdate) {
             // actualizar
-            dispatch(startUpdateActa(values,asunto, id_acta));
-        
-        }else {
+            dispatch(startUpdateActa(values, asunto, id_acta));
+
+        } else {
             dispatch(startAddNewActa(values, asunto));
         }
 
         setOpenModal(false);
         reset();
-        
+
     }
 
 
     useEffect(() => {
-        if( !annoucement ){
+        if (!annoucement) {
             dispatch(startGetAnnoucement());
-        } 
-    },[dispatch,annoucement]);
-    
-    return <>
-        <Fab color='cyan' toggle={ true  } icon='add' click={ handleAddActa }/>
-        <ModalActas  isOpen={ openModal } setOpenModal={ setOpenModal }>
+        }
+    }, [dispatch, annoucement]);
+
+    return <> <Fragment>
+        <div className="agregarActa">
+            <Fab color='cyan' toggle={true} icon='add' click={handleAddActa} />
+        </div>
+        <ModalActas isOpen={openModal} setOpenModal={setOpenModal}>
             <span>Seleccione los archivos adjuntos y la convocatoria correspondiente</span>
-            <form onSubmit={ handleSubmit as any}>
-                <input 
+            <form onSubmit={handleSubmit as any}>
+                <input
                     type="file"
-                    multiple={ true } 
-                    name="files" 
-                    onChange={ inputOnChange }
-                    ref={ ref_files_input }
-                    style={{display: 'none'}}
+                    multiple={true}
+                    name="files"
+                    onChange={inputOnChange}
+                    ref={ref_files_input}
+                    style={{ display: 'none' }}
                 />
 
-                <i 
-                    className="material-icons" 
-                    style={{cursor:'pointer',margin: '.2em'}}
-                    onClick={ handleShowInput }
-                    >attach_file
+                <i
+                    className="material-icons"
+                    style={{ cursor: 'pointer', margin: '.2em' }}
+                    onClick={handleShowInput}
+                >attach_file
                 </i>
 
-                <select 
+                <select
                     name="convocatoria"
-                    style={{display: 'block'}}
-                    onChange={ inputOnChange }
-                    value={ values.convocatoria } 
-                > 
+                    style={{ display: 'block' }}
+                    onChange={inputOnChange}
+                    value={values.convocatoria}
+                >
                     <option value="" disabled hidden >Selecciona una convocatoria</option>
                     {
                         annoucement?.map(conv => <option value={conv.id} key={conv.id}>{conv.asunto}</option>)
                     }
                 </select>
-               
+
                 <button type='submit'> Submit</button>
             </form>
         </ModalActas>
+    </Fragment>
     </>
+
 }
 
 

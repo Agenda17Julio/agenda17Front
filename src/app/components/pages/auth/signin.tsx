@@ -7,7 +7,7 @@ import { i_signin } from '../../../interfaces/components/auth';
 import { i_redux } from '../../../interfaces/redux';
 import Loading from '../../ui/loading';
 import '../../../styles/components/auth/_signin.scss'
-import {DropdownOptions} from 'materialize-css'
+
 
 const SigninScreen = () => {
 
